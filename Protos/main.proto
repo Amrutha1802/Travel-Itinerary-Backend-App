@@ -40,7 +40,7 @@ message State {
 }
 message States { repeated State states; }
 message StateId { int32 id = 1; }
-message message TouristPlace {
+message TouristPlace {
   int32 id = 1;
   string name = 2;
   int32 state_id = 3;
