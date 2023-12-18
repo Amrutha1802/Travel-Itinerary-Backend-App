@@ -8,7 +8,7 @@ service Functions {
   rpc GetTouristPlaceById(TouristPlaceId) returns (TouristPlace) {}
   rpc GetFavoritesOfUser(UserId) returns () { Favorites }
   rpc AddToFavoritesOfUser(Favorite) returns (Favorite) {}
-  rpc DeleteFromFavoritesOfUser(Favorite) returns () {}
+  rpc DeleteFromFavoritesOfUser(Favorite) returns (EmptyResponse) {}
   rpc GetItinerariesOfUser(UserId) returns (Itineraries) {}
   rpc AddItinerary(Itinerary) returns (Itinerary) {}
   rpc DeleteItinerary(ItineraryId) returns (EmptyResponse) {}
