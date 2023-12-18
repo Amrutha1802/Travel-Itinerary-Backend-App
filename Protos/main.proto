@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+service Functions {
+  rpc AddUser(User) returns (User) {}
+  rpc GetStates(EmptyRequest) returns (States) {}
+  rpc GetStateById(StateId) returns (State) {}
+  rpc GetTouristPlacesInState(StateId) returns (TouristPlaces) {}
+  rpc GetTouristPlaceById(TouristPlaceId) returns (TouristPlace) {}
+  rpc GetFavoritesOfUser(UserId) returns () { Favorites }
+  rpc AddToFavoritesOfUser(Favorite) returns (Favorite) {}
+  rpc DeleteFromFavoritesOfUser(Favorite) returns () {}
+  rpc GetItinerariesOfUser(UserId) returns (Itineraries) {}
+  rpc AddItinerary(Itinerary) returns (Itinerary) {}
+  rpc DeleteItinerary(ItineraryId) returns (EmptyResponse) {}
+  rpc UpdateItineray(Itinerary) returns (Itinerary) {}
+  rpc GetItinerary(ItineraryId) returns (Itinerary) {}
+  rpc GetItineraryPlaces(ItineraryId) returns (ItineraryPlaces) {}
+  rpc AddPlaceToItineray(ItineraryPlace) returns (ItineraryPlace) {}
+  rpc UpdatePlaceInItinerary(ItineraryPlace) returns (ItineraryPlace) {}
+  rpc DeletePlaceInItinerary(ItineraryPlace) returns () {}
+  rpc GetExpensesOfItinerary(ItineraryId) returns (Expenses) {}
+  rpc AddExpensesToItinerary(Expense) returns (Expense) {}
+  rpc GetRemainingBudget(ItineraryId) returns (RemainingBudget) {}
+}
+message User {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  int64 mobile_no = 4;
+  Status status = 5;
+}
+message EmptyRequest {}
+message EmptyResponse {}
+message State {
+  int32 id = 1;
+  string name = 2;
+  string image_url = 3;
+  string description = 4;
+  int32 type_id = 5;
+}
+message States { repeated State states; }
+message StateId { int32 id = 1; }
+message message TouristPlace {
+  int32 id = 1;
+  string name = 2;
+  int32 state_id = 3;
+  string image_url = 4;
+  string description = 5;
+  float review = 6;
+}
+message TouristPlaceId { int32 id = 1; }
+message TouristPlaces { repeated TouristPlace tourist_places = 1; }
+message UserId { int id = 1; }
+message Favorite {
+  int32 id = 1;
+  int32 tourist_place_id = 1;
+}
+message Favorites { repeated Favorite favorites = 1; }
+message States { repeated State states = 1; }
+message Itinerary {
+  int32 id = 1;
+  int32 state_id = 2;
+  Date start_date = 3;
+  Date end_date = 4;
+  int32 user_id = 5;
+  double budget = 6;
+  string notes = 7;
+}
+message ItineraryId { int32 id = 1; }
+message Itineraries { repeated Itinerary itineraries = 1; }
+message ItineraryPlace {
+  int32 id = 1;
+  int32 itinerary_id = 2;
+  int32 tourist_place_id = 3;
+  Time start_time = 4;
+  Time end_time = 5;
+  Date date = 6;
+}
+message ItineraryPlaces { repeated ItineraryPlace itinerary_places = 1; }
+message Expense {
+  int32 id = 1;
+  int32 itinerary_id = 2;
+  double amount = 3;
+  string description = 4;
+  int32 category_id = 5;
+}
+message Expenses { repeated Expense expenses = 1; }
+message Date {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+}
+message Time {
+  int32 hours = 1;
+  int32 minutes = 2;
+  int32 seconds = 3;
+}
+message RemainingBudget { double remaining_budget = 1; }
+enum Status {
+  UNDEFINED_STATUS = 0;
+  ACTIVE = 1;
+  INACTIVE = 2;
+}
