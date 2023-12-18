@@ -6,7 +6,7 @@ service Functions {
   rpc GetStateById(StateId) returns (State) {}
   rpc GetTouristPlacesInState(StateId) returns (TouristPlaces) {}
   rpc GetTouristPlaceById(TouristPlaceId) returns (TouristPlace) {}
-  rpc GetFavoritesOfUser(UserId) returns () { Favorites }
+  rpc GetFavoritesOfUser(UserId) returns (Favorites) {}
   rpc AddToFavoritesOfUser(Favorite) returns (Favorite) {}
   rpc DeleteFromFavoritesOfUser(Favorite) returns (EmptyResponse) {}
   rpc GetItinerariesOfUser(UserId) returns (Itineraries) {}
@@ -17,7 +17,7 @@ service Functions {
   rpc GetItineraryPlaces(ItineraryId) returns (ItineraryPlaces) {}
   rpc AddPlaceToItineray(ItineraryPlace) returns (ItineraryPlace) {}
   rpc UpdatePlaceInItinerary(ItineraryPlace) returns (ItineraryPlace) {}
-  rpc DeletePlaceInItinerary(ItineraryPlace) returns () {}
+  rpc DeletePlaceInItinerary(ItineraryPlace) returns (EmptyResponse) {}
   rpc GetExpensesOfItinerary(ItineraryId) returns (Expenses) {}
   rpc AddExpensesToItinerary(Expense) returns (Expense) {}
   rpc GetRemainingBudget(ItineraryId) returns (RemainingBudget) {}
