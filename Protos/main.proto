@@ -50,7 +50,7 @@ message TouristPlace {
 }
 message TouristPlaceId { int32 id = 1; }
 message TouristPlaces { repeated TouristPlace tourist_places = 1; }
-message UserId { int id = 1; }
+message UserId { int64 id = 1; }
 message Favorite {
   int32 id = 1;
   int32 tourist_place_id = 1;
