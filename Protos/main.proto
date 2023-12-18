@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-service Functions {
+service ItineraryServices {
+
   rpc AddUser(User) returns (User) {}
 
   rpc GetStates(EmptyRequest) returns (States) {}
@@ -87,8 +88,6 @@ message Favorite {
 }
 
 message Favorites { repeated Favorite favorites = 1; }
-
-message States { repeated State states = 1; }
 
 message Itinerary {
   int32 id = 1;
