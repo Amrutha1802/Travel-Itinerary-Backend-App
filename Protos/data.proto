@@ -1,0 +1,23 @@
+syntax = "proto3";
+package mypackage;
+import "main.proto";
+
+service DataServices {
+  rpc AddState(State) returns (State) {};
+
+  rpc AddTouristPlace(State) returns (TouristPlace) {};
+
+  rpc AddStateType(StateType) returns (StateType) {};
+
+  rpc AddExpenseCategory(ExpenseCategory) returns (ExpenseCategory) {};
+}
+
+message StateType {
+  int32 id = 1;
+  string type = 2;
+}
+
+message ExpenseCategory {
+  int32 id = 1;
+  string category = 2;
+}
