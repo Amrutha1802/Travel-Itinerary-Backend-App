@@ -179,4 +179,4 @@ Get Information about all expense categories
 - main_pb2.py and main_pb2_grpc.py: Generated files from the Protocol Buffers definition.
 - sql-docs/db.sql: ddl queries for creating required tables in the MySQL database
 - itinerarylib.py: helper functions for implementing the methods of the server
-- timestamplib.py : helper functions for converting time stamp objects to mysql objects
+- timestamplib.py : helper functions for converting time stamp objects to mysql objects and vice versa
