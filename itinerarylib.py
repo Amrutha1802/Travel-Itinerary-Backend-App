@@ -746,12 +746,13 @@ def get_remaining_budget(request):
         val = (request.id,)
         cursor.execute(sql, val)
         total_expenses = cursor.fetchone()
+        print(total_expenses)
         sql = "SELECT budget FROM Itineraries WHERE id=(%s)"
         val = (request.id,)
         cursor.execute(sql, val)
         total_budget = cursor.fetchone()
-        if total_budget is None:
-            return pb2.RemainingBudget(total_budget[0])
+        if total_expenses[0] is None:
+            return pb2.RemainingBudget(remaining_budget=total_budget[0])
         remaining_budget = total_budget[0] - total_expenses[0]
         return pb2.RemainingBudget(remaining_budget=remaining_budget)
     except db_conn.Error as e:
