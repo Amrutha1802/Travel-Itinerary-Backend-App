@@ -1,6 +1,7 @@
 import grpc
 from concurrent import futures
 import logging
+from grpc import ServerInterceptor, ServerCallDetails
 
 import main_pb2_grpc as pb2_grpc
 from itinerarylib import (
@@ -29,6 +30,17 @@ from itinerarylib import (
     get_expenses_of_itinerary,
     get_remaining_budget,
 )
+
+
+class CorsInterceptor(ServerInterceptor):
+    def intercept_service(self, continuation, handler_call_details):
+        response_headers = [
+            ("access-control-allow-origin", "*"),
+            ("access-control-allow-headers", "content-type"),
+            # Add other necessary CORS headers
+        ]
+
+        return continuation(handler_call_details, response_headers)
 
 
 class ItineraryAppServer(pb2_grpc.ItineraryServicesServicer):
@@ -131,6 +143,7 @@ class ItineraryAppServer(pb2_grpc.ItineraryServicesServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server.intercept(CorsInterceptor())
     pb2_grpc.add_ItineraryServicesServicer_to_server(ItineraryAppServer(), server)
     server.add_insecure_port("[::]:50051")
     server.start()

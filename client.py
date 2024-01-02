@@ -285,6 +285,6 @@ if __name__ == "__main__":
     #     print(i)
 
     # get remaining budget
-    request = pb2.ItineraryId(id=10)
-    response = client.get_remaining_budget(request)
-    print(response)
+    # request = pb2.ItineraryId(id=10)
+    # response = client.get_remaining_budget(request)
+    # print(response)

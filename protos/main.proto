@@ -1,0 +1,206 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+service ItineraryServices {
+
+  rpc CreateUser(User) returns (User) {}
+
+  rpc GetAllStates(EmptyRequest) returns (StatesList) {}
+
+  rpc GetStateByFilter(StateFilterRequest) returns (StatesList) {}
+
+  rpc GetTouristPlaceByFilter(TouristPlaceFilterRequest)
+      returns (TouristPlacesList) {}
+
+  rpc GetUserFavoritePlaces(User) returns (FavoritesList) {}
+
+  rpc AddUserFavoritePlace(AddFavoritePlaceRequest)
+      returns (AddFavoritePlaceResponse) {}
+
+  rpc DeleteUserFavoritePlace(Favorite) returns (EmptyResponse) {}
+
+  rpc GetUserItineraries(User) returns (ItinerariesList) {}
+
+  rpc CreateUserItinerary(CreateUserItineraryRequest)
+      returns (CreateUserItineraryResponse) {}
+
+  rpc DeleteUserItinerary(Itinerary) returns (EmptyResponse) {}
+
+  rpc UpdateUserItinerary(UpdateUserItineraryRequest)
+      returns (UpdateUserItineraryResponse) {}
+
+  rpc GetItineraryById(Itinerary) returns (Itinerary) {}
+
+  rpc AddItineraryPlace(AddItineraryPlaceRequest)
+      returns (AddItineraryPlaceResponse) {}
+
+  rpc DeleteItineraryPlace(ItineraryPlace) returns (EmptyResponse) {}
+
+  rpc GetItineraryExpenses(Itinerary) returns (ExpensesList) {}
+
+  rpc AddItineraryExpense(Expense) returns (Expense) {}
+
+  rpc GetBudgetRemaining(Itinerary) returns (BudgetRemaining) {}
+}
+
+message User {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  Status status = 4;
+}
+
+enum Status {
+  UNDEFINED_STATUS = 0;
+  ACTIVE = 1;
+  INACTIVE = 2;
+}
+
+message State {
+  int32 id = 1;
+  string name = 2;
+  string image_url = 3;
+  string description = 4;
+  StateType type = 5;
+}
+
+enum StateType {
+  UNDEFINED_STATE_TYPE = 0;
+  STATE = 1;
+  UNION_TERRITORY = 2;
+}
+
+message StatesList { repeated State states = 1; }
+
+enum TYPE_OF_FILTER {
+  FILTER_BY_ID = 1;
+  FILTER_BY_STATE_TYPE = 2;
+  FILTER_BY_STATE_ID = 3;
+}
+
+message StateFilterRequest {
+  int32 state_id = 1;
+  StateType type = 2;
+  TYPE_OF_FILTER type_of_filter = 3;
+}
+
+message TouristPlaceFilterRequest {
+  int32 tourist_place_id = 1;
+  int32 state_id = 2;
+  TYPE_OF_FILTER type_of_filter = 3;
+}
+
+message EmptyRequest {}
+
+message EmptyResponse {}
+
+message TouristPlace {
+  int32 id = 1;
+  string name = 2;
+  string state_name = 3;
+  string image_url = 4;
+  string description = 5;
+  double review = 6;
+}
+
+message TouristPlacesList { repeated TouristPlace tourist_places = 1; }
+
+message FavoritesList { repeated Favorite favorites = 1; }
+
+message Favorite {
+  int32 id = 1;
+  TouristPlace tourist_place = 2;
+}
+
+message AddFavoritePlaceRequest {
+  int32 user_id = 1;
+  int32 tourist_place_id = 2;
+}
+
+message AddFavoritePlaceResponse { Favorite favorite = 1; }
+
+message Itinerary {
+  int32 id = 1;
+  State state = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  double budget = 5;
+  string notes = 6;
+  repeated ItineraryPlace itinerary_places = 7;
+}
+
+message CreateUserItineraryRequest {
+  int32 state_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  int32 user_id = 4;
+  double budget = 5;
+  string notes = 6;
+  // repeated ItineraryPlace places = 7;
+}
+
+message CreateUserItineraryResponse { Itinerary itinerary = 1; }
+
+message UpdateUserItineraryRequest {
+  int32 id = 1;
+  double budget = 2;
+  string notes = 3;
+  repeated ItineraryPlace places = 4;
+}
+
+message UpdateUserItineraryResponse { Itinerary itinerary = 1; }
+
+message ItinerariesList { repeated Itinerary itineraries = 1; }
+
+message ItineraryPlace {
+  int32 id = 1;
+  TouristPlace tourist_place = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+}
+
+message GetItineraryPlacesRequest {
+  int32 itinerary_id = 1;
+  google.protobuf.Timestamp visit_date = 2;
+}
+
+message GetItineraryPlacesResponse {
+  repeated ItineraryPlace itinerary_places = 1;
+}
+
+message AddItineraryPlaceRequest {
+  int32 tourist_place_id = 1;
+  int32 itinerary_id = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+  google.protobuf.Timestamp visit_date = 5;
+}
+
+message AddItineraryPlaceResponse { ItineraryPlace itinerary_place = 1; }
+
+message ItineraryPlaceId { int32 id = 1; }
+
+message ItineraryPlaces { repeated ItineraryPlace itinerary_places = 1; }
+
+message Expense {
+  int32 itinerary_id = 1;
+  ExpenseCategory expense_category = 2;
+  string description = 3;
+  double amount = 4;
+}
+
+message AddExpenseResponse { repeated Expense expenses = 1; }
+
+message ExpensesList { repeated Expense expenses = 1; }
+
+message BudgetRemaining { double budget_remaining = 1; }
+
+enum ExpenseCategory {
+  OTHER = 0;
+  FOOD = 1;
+  TRAVEL = 2;
+  STAY = 3;
+  ACTIVITIES = 4;
+  SHOPPING = 5;
+}
