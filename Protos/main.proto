@@ -4,38 +4,46 @@ import "google/protobuf/timestamp.proto";
 
 service ItineraryServices {
 
+  // To create a new user
   rpc CreateUser(CreateUserRequest) returns (User) {}
 
+  // Get status' static values
+  // TODO: remove this method after moving STATUS' to enum
   rpc GetUserStatuses(EmptyRequest) returns (Statuses) {}
 
   rpc GetAllStates(EmptyRequest) returns (States) {}
 
-  rpc GetStatesByType(StateTypeId) returns (States) {}
 
-  rpc GetStateTypes(EmptyRequest) returns (StateTypes) {}
+  rpc GetStateByFilter(StateFilterRequest) returns (States) {}
+
+  rpc GetStatesByType(StateTypeId) returns (States) {}
 
   rpc GetStateById(StateId) returns (State) {}
 
-  rpc GetTouristPlacesInState(StateId) returns (TouristPlaces) {}
+  // TODO: remove this method after moving to enum
+  rpc GetStateTypes(EmptyRequest) returns (StateTypes) {}
 
+
+  // Filter use case
+  rpc GetTouristPlacesInState(StateId) returns (TouristPlaces) {}
   rpc GetTouristPlaceById(TouristPlaceId) returns (TouristPlace) {}
 
-  rpc GetFavoritesOfUser(UserId) returns (Favorites) {}
+  rpc GetUserFavoritePlaces(User) returns (Favorites) {}
+  rpc AddUserFavoritePlace(AddFavoritePlaceRequest) returns (Favorite) {}
+  rpc DeleteUserFavoritePlace(Favorite) returns (Favorite) {}
 
+
+  // TODO remove after implementating renamed methods
+  rpc GetFavoritesOfUser(User) returns (Favorites) {}
   rpc AddToFavoritesOfUser(AddFavoriteRequest) returns (Favorite) {}
-
   rpc DeleteFromFavoritesOfUser(FavoriteId) returns (Favorite) {}
 
+  // TODO: passive to active
   rpc GetItinerariesOfUser(UserId) returns (Itineraries) {}
-
   rpc CreateItinerary(AddItineraryRequest) returns (Itinerary) {}
-
   rpc DeleteItinerary(ItineraryId) returns (Itinerary) {}
-
   rpc UpdateItinerary(UpdateItineraryRequest) returns (Itinerary) {}
-
   rpc GetItinerary(ItineraryId) returns (Itinerary) {}
-
   rpc AddPlaceToItinerary(AddItineraryPlaceRequest) returns (ItineraryPlace) {}
 
   rpc UpdatePlaceInItinerary(UpdateItineraryPlaceRequest)
@@ -52,6 +60,7 @@ service ItineraryServices {
 
   rpc GetRemainingBudget(ItineraryId) returns (RemainingBudget) {}
 
+  // TODO: ENUM
   rpc GetExpenseCategories(EmptyRequest) returns (ExpenseCategories) {}
 }
 
@@ -60,6 +69,11 @@ message CreateUserRequest {
   string email = 2;
   int64 mobile_no = 3;
 }
+
+/*message CreateUserResponse {*/
+  /*string welcome_message = 1;*/
+  /*user User = 2;*/
+/*}*/
 
 message User {
   int32 id = 1;
@@ -76,7 +90,8 @@ message Status {
 
 message Statuses { repeated Status statuses = 1; }
 
-message UserId { int32 id = 1; }
+// TODO: no longer required
+/*message UserId { int32 id = 1; }*/
 
 message State {
   int32 id = 1;
@@ -84,6 +99,24 @@ message State {
   string image_url = 3;
   string description = 4;
   string type = 5;
+}
+
+
+/*
+TODO: remove later
+   results = get_by_id(id)
+   results = filter_by_type(results)
+   return results
+*/
+
+message StateFilterRequest {
+  int32 state_id = 1;
+  repeated StateType types = 2;
+
+  /*TYPE_OF_FILTER*/
+  // enum
+  // FILTER_BY_ID
+  // FILTER_BY_STATE_TYPE
 }
 
 message States { repeated State states = 1; }
@@ -126,7 +159,8 @@ message AddFavoriteRequest {
   int32 tourist_place_id = 2;
 }
 
-message FavoriteId { int32 id = 1; }
+// TODO: no longer required
+/*message FavoriteId { int32 id = 1; }*/
 
 message Favorites { repeated Favorite favorites = 1; }
 
@@ -146,8 +180,11 @@ message Itinerary {
   google.protobuf.Timestamp end_date = 4;
   double budget = 5;
   string notes = 6;
+
+  repeated ItineraryPlace places = 7;
 }
 
+// TODO: no longer required
 message ItineraryId { int32 id = 1; }
 
 message UpdateItineraryRequest {

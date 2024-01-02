@@ -1,7 +1,21 @@
 # Travel Itinerary Backend Application with gRPC, Protocol Buffers, and MySQL
 
 This is a Travel Itinerary Application implemented using gRPC, Protocol Buffers, and MySQL in Python.
-The application allows users to view tourist place in different states, add tourist places to their favorites,view their favorites, user can create itinerary for a trip t o a state , view the itineraries created by him, in the itinerary user can add notes, add places to visit and visit timings on a particular date, add budget, add expenses to an itinerary, user can update the notes he has written , update the budget and remove places in the itinerary
+The application allows users
+- to view tourist place in different states
+- add tourist places to their favorites
+- view their favorites
+- user can create itinerary for a trip to a state
+- view the itineraries created by the user,
+- in the itinerary
+    - user can add notes
+    - add places to visit
+    - visit timings on a particular date
+    - add budget
+    - add expenses to an itinerary
+    - user can update the notes
+    - update the budget
+    - remove places in the itinerary
 
 ## Prerequisites
 
@@ -10,7 +24,7 @@ Before running the application, install following dependencies:
 - Python 3.8.10
 - MySQL 8.0.35
 
-`pip install requirements.txt`
+`pip install -r requirements.txt`
 
 Create a database in MySQL- ItineraryDataBase
 

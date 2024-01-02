@@ -1,0 +1,9 @@
+- Protos -> protos
+- Have separate req, response messages for all methods
+- Status -> enum
+- Get rid of GetAllStates method
+
+- StateType -> enum
+
+- Rethink about the UpdateItinerary implementation
+  - include itineraryplaces in itinerary message
