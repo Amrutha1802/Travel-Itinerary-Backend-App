@@ -7,3 +7,19 @@
 
 - Rethink about the UpdateItinerary implementation
   - include itineraryplaces in itinerary message
+
+
+CreateUser
+GetAllStates (write a python script to populate states)
+https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/csv/states.csv
+GetStateByFilter
+
+
+Action items
+- Cleanup proto
+- Use ENV variables for your secret
+- Script to populate states from the source
+- Implement
+  CreateUser
+  GetAllStates
+  GetStateByFilter

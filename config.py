@@ -1,9 +1,11 @@
 import pymysql
 
-# Creating my sql connection object
-db_conn = pymysql.connect(
+# Creating mysql connection object
+db_conn2 = pymysql.connect(
     host="localhost",
     user="root",
-    password="12345678",
+    password='',
     database="ItineraryDataBase",
+    charset='utf8mb4',
+    cursorclass=pymysql.cursors.DictCursor
 )

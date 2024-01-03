@@ -18,7 +18,7 @@ service ItineraryServices {
   rpc AddUserFavoritePlace(AddFavoritePlaceRequest)
       returns (AddFavoritePlaceResponse) {}
 
-  rpc DeleteUserFavoritePlace(Favorite) returns (EmptyResponse) {}
+  rpc DeleteUserFavoritePlace(FavoritePlace) returns (EmptyResponse) {}
 
   rpc GetUserItineraries(User) returns (ItinerariesList) {}
 
@@ -40,7 +40,8 @@ service ItineraryServices {
 
   rpc AddItineraryExpense(Expense) returns (Expense) {}
 
-  rpc GetBudgetRemaining(Itinerary) returns (BudgetRemaining) {}
+  // TODO: we can remove this after moving budget to itinerary
+  rpc GetRemainingBudget(Itinerary) returns (BudgetRemaining) {}
 }
 
 message User {
@@ -72,8 +73,8 @@ enum StateType {
 
 message StatesList { repeated State states = 1; }
 
-enum TYPE_OF_FILTER {
-  UNSPECIFIED = 0;
+enum PlaceFilterType {
+  UNDEFINED_PLACE_FILTER_TYPE = 0;
   FILTER_BY_ID = 1;
   FILTER_BY_STATE_TYPE = 2;
   FILTER_BY_STATE_ID = 3;
@@ -106,9 +107,9 @@ message TouristPlace {
 
 message TouristPlacesList { repeated TouristPlace tourist_places = 1; }
 
-message FavoritesList { repeated Favorite favorites = 1; }
+message FavoritePlacesList { repeated FavoritePlace favorites = 1; }
 
-message Favorite {
+message FavoritePlace {
   int32 id = 1;
   TouristPlace tourist_place = 2;
 }
@@ -128,6 +129,7 @@ message Itinerary {
   double budget = 5;
   string notes = 6;
   repeated ItineraryPlace places = 7;
+  //TODO: add ItineraryExpense
 }
 
 message CreateUserItineraryRequest {
@@ -176,6 +178,8 @@ message AddExpenseResponse { repeated Expense expenses = 1; }
 
 message ExpensesList { repeated Expense expenses = 1; }
 
+// TODO: move this field to itinerary
+// rename: BudgetRemaining -> RemainingBudget
 message BudgetRemaining { double budget_remaining = 1; }
 
 enum ExpenseCategory {

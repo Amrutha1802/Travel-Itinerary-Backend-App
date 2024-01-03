@@ -7,6 +7,7 @@ app = Flask(__name__)
 @app.route("/api/auth/google", methods=["POST"])
 def google_auth():
     code = request.json.get("code")
+    # TODO: use environment variables for sensitive
     client_id = (
         "449338215792-oshbuk35i0evsli77dna1d887hmju2cs.apps.googleusercontent.com"
     )
