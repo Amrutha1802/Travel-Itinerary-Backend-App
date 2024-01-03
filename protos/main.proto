@@ -27,8 +27,7 @@ service ItineraryServices {
 
   rpc DeleteUserItinerary(Itinerary) returns (EmptyResponse) {}
 
-  rpc UpdateUserItinerary(UpdateUserItineraryRequest)
-      returns (UpdateUserItineraryResponse) {}
+  rpc UpdateUserItinerary(Itinerary) returns (Itinerary) {}
 
   rpc GetItineraryById(Itinerary) returns (Itinerary) {}
 
@@ -74,6 +73,7 @@ enum StateType {
 message StatesList { repeated State states = 1; }
 
 enum TYPE_OF_FILTER {
+  UNSPECIFIED = 0;
   FILTER_BY_ID = 1;
   FILTER_BY_STATE_TYPE = 2;
   FILTER_BY_STATE_ID = 3;
@@ -127,7 +127,7 @@ message Itinerary {
   google.protobuf.Timestamp end_date = 4;
   double budget = 5;
   string notes = 6;
-  repeated ItineraryPlace itinerary_places = 7;
+  repeated ItineraryPlace places = 7;
 }
 
 message CreateUserItineraryRequest {
@@ -141,15 +141,6 @@ message CreateUserItineraryRequest {
 }
 
 message CreateUserItineraryResponse { Itinerary itinerary = 1; }
-
-message UpdateUserItineraryRequest {
-  int32 id = 1;
-  double budget = 2;
-  string notes = 3;
-  repeated ItineraryPlace places = 4;
-}
-
-message UpdateUserItineraryResponse { Itinerary itinerary = 1; }
 
 message ItinerariesList { repeated Itinerary itineraries = 1; }
 
