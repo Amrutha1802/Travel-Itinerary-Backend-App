@@ -13,7 +13,7 @@ service ItineraryServices {
   rpc GetTouristPlaceByFilter(TouristPlaceFilterRequest)
       returns (TouristPlacesList) {}
 
-  rpc GetUserFavoritePlaces(User) returns (FavoritesList) {}
+  rpc GetUserFavoritePlaces(User) returns (FavoritePlacesList) {}
 
   rpc AddUserFavoritePlace(AddFavoritePlaceRequest)
       returns (AddFavoritePlaceResponse) {}
@@ -36,12 +36,7 @@ service ItineraryServices {
 
   rpc DeleteItineraryPlace(ItineraryPlace) returns (EmptyResponse) {}
 
-  rpc GetItineraryExpenses(Itinerary) returns (ExpensesList) {}
-
   rpc AddItineraryExpense(Expense) returns (Expense) {}
-
-  // TODO: we can remove this after moving budget to itinerary
-  rpc GetRemainingBudget(Itinerary) returns (BudgetRemaining) {}
 }
 
 message User {
@@ -83,13 +78,13 @@ enum PlaceFilterType {
 message StateFilterRequest {
   int32 state_id = 1;
   StateType type = 2;
-  TYPE_OF_FILTER type_of_filter = 3;
+  PlaceFilterType type_of_filter = 3;
 }
 
 message TouristPlaceFilterRequest {
   int32 tourist_place_id = 1;
   int32 state_id = 2;
-  TYPE_OF_FILTER type_of_filter = 3;
+  PlaceFilterType type_of_filter = 3;
 }
 
 message EmptyRequest {}
@@ -119,7 +114,7 @@ message AddFavoritePlaceRequest {
   int32 tourist_place_id = 2;
 }
 
-message AddFavoritePlaceResponse { Favorite favorite = 1; }
+message AddFavoritePlaceResponse { FavoritePlace place = 1; }
 
 message Itinerary {
   int32 id = 1;
@@ -129,7 +124,8 @@ message Itinerary {
   double budget = 5;
   string notes = 6;
   repeated ItineraryPlace places = 7;
-  //TODO: add ItineraryExpense
+  repeated Expense expenses = 8;
+  double remainingbudget = 9;
 }
 
 message CreateUserItineraryRequest {
@@ -139,7 +135,6 @@ message CreateUserItineraryRequest {
   int32 user_id = 4;
   double budget = 5;
   string notes = 6;
-  // repeated ItineraryPlace places = 7;
 }
 
 message CreateUserItineraryResponse { Itinerary itinerary = 1; }
@@ -149,8 +144,10 @@ message ItinerariesList { repeated Itinerary itineraries = 1; }
 message ItineraryPlace {
   int32 id = 1;
   TouristPlace tourist_place = 2;
-  google.protobuf.Timestamp start_time = 3;
-  google.protobuf.Timestamp end_time = 4;
+  int32 itinerary_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  google.protobuf.Timestamp visit_date = 6;
 }
 
 message AddItineraryPlaceRequest {
@@ -165,22 +162,12 @@ message AddItineraryPlaceResponse { ItineraryPlace itinerary_place = 1; }
 
 message ItineraryPlaceId { int32 id = 1; }
 
-message ItineraryPlaces { repeated ItineraryPlace itinerary_places = 1; }
-
 message Expense {
   int32 itinerary_id = 1;
   ExpenseCategory expense_category = 2;
   string description = 3;
   double amount = 4;
 }
-
-message AddExpenseResponse { repeated Expense expenses = 1; }
-
-message ExpensesList { repeated Expense expenses = 1; }
-
-// TODO: move this field to itinerary
-// rename: BudgetRemaining -> RemainingBudget
-message BudgetRemaining { double budget_remaining = 1; }
 
 enum ExpenseCategory {
   OTHER = 0;

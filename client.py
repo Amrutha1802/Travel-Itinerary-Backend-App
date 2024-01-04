@@ -1,17 +1,19 @@
 import grpc
-import main_pb2 as pb2
-import main_pb2_grpc as pb2_grpc
-from datetime import datetime, timezone
-from datetime import datetime, timedelta
-from google.protobuf.timestamp_pb2 import Timestamp
 
-from timestamplib import create_time_stamp_from_datetime
+# import main_pb2 as pb2
+# import main_pb2_grpc as pb2_grpc
+# from datetime import datetime, timezone
+# from datetime import datetime, timedelta
+# from google.protobuf.timestamp_pb2 import Timestamp
+
+# from t import create_time_stamp_from_datetime
+import generated
 
 
 class ItineraryClient(object):
     def __init__(self):
         self.channel = grpc.insecure_channel("localhost:50051")
-        self.stub = pb2_grpc.ItineraryServicesStub(self.channel)
+        self.stub = generated.ItineraryServicesStub(self.channel)
 
     def create_user(self, request):
         response = self.stub.CreateUser(request)
@@ -113,14 +115,13 @@ class ItineraryClient(object):
 if __name__ == "__main__":
     client = ItineraryClient()
     # create user
-    # request = pb2.CreateUserRequest(
-    #     name="Amrutha",
-    #     email="amothajigari@gmail.com",
-    #     mobile_no=8341236432,
-    #     status_id=1,
-    # )
-    # response = client.create_user(request)
-    # print(response)
+    request = generated.User(
+        name="Varsha",
+        email="amothajigari@gmail.com",
+        status="ACTIVE",
+    )
+    response = client.create_user(request)
+    print(response)
 
     # get user statueses
     # request = pb2.EmptyRequest()

@@ -1,55 +1,16 @@
 import grpc
 from concurrent import futures
 import logging
-from grpc import ServerInterceptor, ServerCallDetails
 
-import main_pb2_grpc as pb2_grpc
-from itinerarylib import (
-    create_user,
-    get_user_statuses,
-    get_all_states,
-    get_states_by_type,
-    get_state_types,
-    get_state_by_id,
-    get_tourist_places_in_state,
-    get_tourist_place_by_id,
-    add_to_favorites_of_user,
-    get_favorites_of_user,
-    delete_from_favorites_of_user,
-    create_itinerary,
-    get_itineraries_of_user,
-    update_itinerary,
-    delete_itinerary,
-    get_itinerary_by_id,
-    add_place_to_itinerary,
-    update_place_in_itinerary,
-    get_itinerary_places_by_date_and_id,
-    delete_place_in_itinerary,
-    get_expense_categories,
-    add_expense_to_itinerary,
-    get_expenses_of_itinerary,
-    get_remaining_budget,
-)
+import itinerary
+
+# from generated import main_pb2_grpc
+import generated
 
 
-class CorsInterceptor(ServerInterceptor):
-    def intercept_service(self, continuation, handler_call_details):
-        response_headers = [
-            ("access-control-allow-origin", "*"),
-            ("access-control-allow-headers", "content-type"),
-            # Add other necessary CORS headers
-        ]
-
-        return continuation(handler_call_details, response_headers)
-
-
-class ItineraryAppServer(pb2_grpc.ItineraryServicesServicer):
+class ItineraryAppServer(generated.ItineraryServicesServicer):
     def CreateUser(self, request, context):
-        response = create_user(request)
-        return response
-
-    def GetUserStatuses(self, request, context):
-        response = get_user_statuses()
+        response = itinerary.create_user(request)
         return response
 
     def GetAllStates(self, request, context):
@@ -143,8 +104,7 @@ class ItineraryAppServer(pb2_grpc.ItineraryServicesServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    server.intercept(CorsInterceptor())
-    pb2_grpc.add_ItineraryServicesServicer_to_server(ItineraryAppServer(), server)
+    generated.add_ItineraryServicesServicer_to_server(ItineraryAppServer(), server)
     server.add_insecure_port("[::]:50051")
     server.start()
     server.wait_for_termination()

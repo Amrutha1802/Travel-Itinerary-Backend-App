@@ -11,13 +11,13 @@ CREATE TABLE Status(
     PRIMARY KEY (id)
 );
 
-CREATE TABLE ExpenseCategories(
+CREATE TABLE Expense_Categories(
     id int NOT NULL AUTO_INCREMENT,
     category varchar(200),
     PRIMARY KEY (id)
 );
 
-CREATE TABLE StateTypes(
+CREATE TABLE State_Types(
     id int NOT NULL AUTO_INCREMENT,
     type varchar(200),
     PRIMARY KEY (id)
@@ -30,7 +30,7 @@ CREATE TABLE States(
    description text,
    state_type_id int,
    PRIMARY KEY (id),
-   FOREIGN KEY(state_type_id) REFERENCES StateTypes(id)
+   FOREIGN KEY(state_type_id) REFERENCES State_Types(id)
 );
 
 
@@ -38,7 +38,6 @@ CREATE TABLE Users (
    id int NOT NULL AUTO_INCREMENT,
    name varchar(200),
    email varchar(200),
-   mobile_no bigint,
    status_id int,
    PRIMARY KEY (id),
    FOREIGN KEY(status_id) REFERENCES Status(id)
@@ -69,7 +68,7 @@ CREATE TABLE Itineraries(
    FOREIGN KEY(user_id) REFERENCES Users(id)
 );
 
-CREATE TABLE ItineraryPlaces(
+CREATE TABLE Itinerary_Places(
    id int NOT NULL AUTO_INCREMENT,
    itinerary_id int,
    tourist_place_id int,
@@ -98,7 +97,7 @@ CREATE TABLE Expenses(
     description varchar(200),
     PRIMARY KEY (id),
     FOREIGN KEY(itinerary_id) REFERENCES Itineraries(id),
-    FOREIGN KEY(category_id) REFERENCES ExpenseCategories(id)
+    FOREIGN KEY(category_id) REFERENCES Expense_Categories(id)
 );
 
 
