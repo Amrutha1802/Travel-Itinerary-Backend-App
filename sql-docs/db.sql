@@ -3,14 +3,6 @@
 -- USE ItineraryDataBase;
 
 
-
-
-CREATE TABLE Status(
-    id int NOT NULL AUTO_INCREMENT,
-    status varchar(200),
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE Expense_Categories(
     id int NOT NULL AUTO_INCREMENT,
     category varchar(200),
@@ -38,9 +30,8 @@ CREATE TABLE Users (
    id int NOT NULL AUTO_INCREMENT,
    name varchar(200),
    email varchar(200),
-   status_id int,
-   PRIMARY KEY (id),
-   FOREIGN KEY(status_id) REFERENCES Status(id)
+   status varchar(50),
+   PRIMARY KEY (id)
 );
 
 

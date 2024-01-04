@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("..")
+# sys.path.append("..")
 
 from itinerary.db_config import db_conn2
 from generated import main_pb2
@@ -22,30 +22,84 @@ def check_for_email(email):
 
 
 def create_user(request):
+    """
+    Getting name, email in request
+    Create a user with these details
+    TODO: validation
+    user(name, email)
+    """
     try:
         with db_conn2.cursor() as cursor:
-            query = "SELECT id from State_Types where type=%s"
-            values = (main_pb2.StateType.Name(main_pb2.ACTIVE),)
-            cursor.execute(query, values)
-            result = cursor.fetchone()
-            status_id = result[0]
-            query = "INSERT INTO Users(name,email,status_id) VALUES(%s,%s,%s)"
-            values = (request.name, request.email, status_id)
+            name = request.name
+            email = request.email
+            status = main_pb2.Status.Name(main_pb2.Status.ACTIVE)
+
+            # TODO: validations - later
+            # name
+                # validation-1: shouldn't be empty
+                # validation-2: name should contain only alphabets
+            # email
+                # validation-1: email should be a valid email address format
+
+
+            #TODO: validation-2: check if a user exists with the same email
+
+            query = "INSERT INTO Users(name,email,status) VALUES(%s,%s,%s)"
+            values = (name, email, status)
             cursor.execute(query, values)
             db_conn2.commit()
             last_inserted_id = cursor.lastrowid
-            query = "SELECT name, email, status_id FROM Users WHERE id = %s"
+
+            query = "SELECT name, email, status FROM Users WHERE id = %s"
             values = (last_inserted_id,)
             cursor.execute(query, values)
-            user = cursor.fetchone()
-            user_status_id = user[2]
-            user_status = main_pb2.StatusType(user_status_id)
-            return main_pb2.User(
+            user_db = cursor.fetchone()
+
+            # import ipdb; ipdb.set_trace()
+            user_pb2 = main_pb2.User(
                 id=last_inserted_id,
-                name=user[0],
-                email=user[1],
-                status=user_status,
+                name=user_db['name'],
+                email=user_db['email'],
+                status=user_db['status'],
             )
+
+            return user_pb2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            # query = "SELECT id from State_Types where type=%s"
+            # values = (main_pb2.StateType.Name(main_pb2.ACTIVE),)
+            # cursor.execute(query, values)
+            # result = cursor.fetchone()
+            # status_id = result[0]
+            # query = "INSERT INTO Users(name,email,status_id) VALUES(%s,%s,%s)"
+            # values = (request.name, request.email, status_id)
+            # cursor.execute(query, values)
+            # db_conn2.commit()
+            # last_inserted_id = cursor.lastrowid
+            # query = "SELECT name, email, status_id FROM Users WHERE id = %s"
+            # values = (last_inserted_id,)
+            # cursor.execute(query, values)
+            # user = cursor.fetchone()
+            # user_status_id = user[2]
+            # user_status = main_pb2.StatusType(user_status_id)
+            # return main_pb2.User(
+                # id=last_inserted_id,
+                # name=user[0],
+                # email=user[1],
+                # status=user_status,
+            # )
     except db_conn2.Error as e:
         raise e
     except Exception as e:

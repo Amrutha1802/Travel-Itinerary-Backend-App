@@ -7,6 +7,7 @@ import grpc
 # from google.protobuf.timestamp_pb2 import Timestamp
 
 # from t import create_time_stamp_from_datetime
+# TODO: use pb2 and pb2_grpc for imports
 import generated
 
 
