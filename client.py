@@ -34,7 +34,7 @@ class ItineraryClient(object):
         return response
 
     def add_user_favorite_place(self, request):
-        response = self.stub.GetTouristPlacesByFilter(request)
+        response = self.stub.AddUserFavoritePlace(request)
         return response
 
     def get_states_by_type(self, request):

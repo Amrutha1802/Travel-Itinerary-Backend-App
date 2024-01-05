@@ -3,7 +3,7 @@ import sys
 sys.path.append("..")
 
 from itinerary.db_config import db_conn2
-from generated import main_pb2
+from gen import main_pb2
 
 
 def create_user(request):
