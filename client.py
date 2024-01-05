@@ -8,13 +8,14 @@ import grpc
 
 # from t import create_time_stamp_from_datetime
 # TODO: use pb2 and pb2_grpc for imports
-import generated
+from gen import main_pb2_grpc as pb2_grpc
+from gen import main_pb2 as pb2
 
 
 class ItineraryClient(object):
     def __init__(self):
         self.channel = grpc.insecure_channel("localhost:50051")
-        self.stub = generated.ItineraryServicesStub(self.channel)
+        self.stub = pb2_grpc.ItineraryServicesStub(self.channel)
 
     def create_user(self, request):
         response = self.stub.CreateUser(request)
@@ -24,8 +25,16 @@ class ItineraryClient(object):
         response = self.stub.GetAllStates(request)
         return response
 
-    def get_user_statuses(self, request):
-        response = self.stub.GetUserStatuses(request)
+    def get_states_by_filter(self, request):
+        response = self.stub.GetStateByFilter(request)
+        return response
+
+    def get_tourist_places_by_filter(self, request):
+        response = self.stub.GetTouristPlacesByFilter(request)
+        return response
+
+    def add_user_favorite_place(self, request):
+        response = self.stub.GetTouristPlacesByFilter(request)
         return response
 
     def get_states_by_type(self, request):
@@ -116,24 +125,48 @@ class ItineraryClient(object):
 if __name__ == "__main__":
     client = ItineraryClient()
     # create user
-    request = generated.User(
-        name="Varsha",
-        email="amothajigari@gmail.com",
-        status="ACTIVE",
-    )
-    response = client.create_user(request)
+    # request = pb2.User(
+    #     name="User4",
+    #     email="user4@gmail.com",
+    # )
+    # response = client.create_user(request)
+    # print(response)
+
+    # get all states
+    # request = pb2.EmptyRequest()
+    # response = client.get_states(request)
+    # for i in response.states:
+    #     print(i)
+
+    # get states by filter
+    # type = pb2.StateType.Name(2)
+    # print("type is", type)
+
+    # get_states_by_filter
+    # request = pb2.StateFilterRequest(
+    #     state_id=19, place_type_filter="FILTER_BY_STATE_ID", type="STATE"
+    # )
+    # response = client.get_states_by_filter(request)
+    # for i in response.states:
+    #     print(i)
+
+    # get tourist places by filter
+    # request = pb2.TouristPlacesFilterRequest(
+    #     tourist_place_id=5678, state_id=2, place_type_filter=2
+    # )
+    # response = client.get_tourist_places_by_filter(request)
+    # for i in response.tourist_places:
+    #     print(i)
+
+    # add to favorites of user
+    request = pb2.AddFavoritePlaceRequest(user_id=1, tourist_place_id=2)
+    response = client.add_user_favorite_place(request)
     print(response)
 
     # get user statueses
     # request = pb2.EmptyRequest()
     # response = client.get_user_statuses(request)
     # for i in response.statuses:
-    #     print(i)
-
-    # get all states
-    # request = pb2.EmptyRequest()
-    # response = client.get_states(request)
-    # for i in response.states:
     #     print(i)
 
     # get states by type
