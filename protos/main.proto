@@ -8,10 +8,10 @@ service ItineraryServices {
 
   rpc GetAllStates(EmptyRequest) returns (StatesList) {}
 
-  rpc GetStateByFilter(StateFilterRequest) returns (StatesList) {}
+  rpc GetStateByFilter(StateFilterRequest) returns (StatesFilterResponse) {}
 
-  rpc GetTouristPlaceByFilter(TouristPlaceFilterRequest)
-      returns (TouristPlacesList) {}
+  rpc GetTouristPlacesByFilter(TouristPlacesFilterRequest)
+      returns (TouristPlacesFilterResponse) {}
 
   rpc GetUserFavoritePlaces(User) returns (FavoritePlacesList) {}
 
@@ -70,21 +70,27 @@ message StatesList { repeated State states = 1; }
 
 enum PlaceFilterType {
   UNDEFINED_PLACE_FILTER_TYPE = 0;
-  FILTER_BY_ID = 1;
+  FILTER_BY_STATE_ID = 1;
   FILTER_BY_STATE_TYPE = 2;
-  FILTER_BY_STATE_ID = 3;
+  FILTER_BY_TOURIST_PLACE_ID = 3;
 }
 
 message StateFilterRequest {
   int32 state_id = 1;
   StateType type = 2;
-  PlaceFilterType type_of_filter = 3;
+  PlaceFilterType place_type_filter = 3;
 }
 
-message TouristPlaceFilterRequest {
+message StatesFilterResponse { repeated State states = 1; }
+
+message TouristPlacesFilterRequest {
   int32 tourist_place_id = 1;
   int32 state_id = 2;
-  PlaceFilterType type_of_filter = 3;
+  PlaceFilterType place_type_filter = 3;
+}
+
+message TouristPlacesFilterResponse {
+  repeated TouristPlace tourist_places = 1;
 }
 
 message EmptyRequest {}

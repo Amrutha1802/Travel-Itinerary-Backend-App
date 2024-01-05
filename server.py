@@ -26,8 +26,8 @@ class ItineraryAppServer(pb2_grpc.ItineraryServicesServicer):
         response = db_funcs.add_user_favorite_place(request)
         return response
 
-    def GetStatesByType(self, request, context):
-        response = get_states_by_type(request)
+    def GetUserFavoritePlaces(self, request, context):
+        response = db_funcs.get_user_favorite_places(request)
         return response
 
     def GetStateTypes(self, request, context):

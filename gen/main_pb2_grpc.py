@@ -27,12 +27,12 @@ class ItineraryServicesStub(object):
         self.GetStateByFilter = channel.unary_unary(
             "/ItineraryServices/GetStateByFilter",
             request_serializer=main__pb2.StateFilterRequest.SerializeToString,
-            response_deserializer=main__pb2.StatesList.FromString,
+            response_deserializer=main__pb2.StatesFilterResponse.FromString,
         )
-        self.GetTouristPlaceByFilter = channel.unary_unary(
-            "/ItineraryServices/GetTouristPlaceByFilter",
-            request_serializer=main__pb2.TouristPlaceFilterRequest.SerializeToString,
-            response_deserializer=main__pb2.TouristPlacesList.FromString,
+        self.GetTouristPlacesByFilter = channel.unary_unary(
+            "/ItineraryServices/GetTouristPlacesByFilter",
+            request_serializer=main__pb2.TouristPlacesFilterRequest.SerializeToString,
+            response_deserializer=main__pb2.TouristPlacesFilterResponse.FromString,
         )
         self.GetUserFavoritePlaces = channel.unary_unary(
             "/ItineraryServices/GetUserFavoritePlaces",
@@ -112,7 +112,7 @@ class ItineraryServicesServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
-    def GetTouristPlaceByFilter(self, request, context):
+    def GetTouristPlacesByFilter(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -200,12 +200,12 @@ def add_ItineraryServicesServicer_to_server(servicer, server):
         "GetStateByFilter": grpc.unary_unary_rpc_method_handler(
             servicer.GetStateByFilter,
             request_deserializer=main__pb2.StateFilterRequest.FromString,
-            response_serializer=main__pb2.StatesList.SerializeToString,
+            response_serializer=main__pb2.StatesFilterResponse.SerializeToString,
         ),
-        "GetTouristPlaceByFilter": grpc.unary_unary_rpc_method_handler(
-            servicer.GetTouristPlaceByFilter,
-            request_deserializer=main__pb2.TouristPlaceFilterRequest.FromString,
-            response_serializer=main__pb2.TouristPlacesList.SerializeToString,
+        "GetTouristPlacesByFilter": grpc.unary_unary_rpc_method_handler(
+            servicer.GetTouristPlacesByFilter,
+            request_deserializer=main__pb2.TouristPlacesFilterRequest.FromString,
+            response_serializer=main__pb2.TouristPlacesFilterResponse.SerializeToString,
         ),
         "GetUserFavoritePlaces": grpc.unary_unary_rpc_method_handler(
             servicer.GetUserFavoritePlaces,
@@ -349,7 +349,7 @@ class ItineraryServices(object):
             target,
             "/ItineraryServices/GetStateByFilter",
             main__pb2.StateFilterRequest.SerializeToString,
-            main__pb2.StatesList.FromString,
+            main__pb2.StatesFilterResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -361,7 +361,7 @@ class ItineraryServices(object):
         )
 
     @staticmethod
-    def GetTouristPlaceByFilter(
+    def GetTouristPlacesByFilter(
         request,
         target,
         options=(),
@@ -376,9 +376,9 @@ class ItineraryServices(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            "/ItineraryServices/GetTouristPlaceByFilter",
-            main__pb2.TouristPlaceFilterRequest.SerializeToString,
-            main__pb2.TouristPlacesList.FromString,
+            "/ItineraryServices/GetTouristPlacesByFilter",
+            main__pb2.TouristPlacesFilterRequest.SerializeToString,
+            main__pb2.TouristPlacesFilterResponse.FromString,
             options,
             channel_credentials,
             insecure,

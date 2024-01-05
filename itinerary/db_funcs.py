@@ -239,29 +239,43 @@ def add_user_favorite_place(request):
         with db_conn2.cursor() as cursor:
             user_id = request.user_id
             tourist_place_id = request.tourist_place_id
+            print("user id is ", user_id)
+            print("tourist place id is ", tourist_place_id)
             check_for_user(user_id)
             check_for_tourist_place(tourist_place_id)
-            query = "INSERT INTO Favorites(user_id,tourist_place_id) VALUES(%s,%s)"
+
+            # idempodency
+            query = (
+                "SELECT 1 FROM Favorites where user_id=(%s) and tourist_place_id=(%s)"
+            )
             values = (user_id, tourist_place_id)
             cursor.execute(query, values)
-            last_inserted_id = cursor.lastrowid
+            favorite_place_db = cursor.fetchone()
+            if favorite_place_db is None:
+                query = "INSERT INTO Favorites(user_id,tourist_place_id) VALUES(%s,%s)"
+                values = (user_id, tourist_place_id)
+                cursor.execute(query, values)
+                last_inserted_id = cursor.lastrowid
+                db_conn2.commit()
+                query = (
+                    "SELECT id,user_id,tourist_place_id FROM Favorites WHERE id = %s"
+                )
+                values = (last_inserted_id,)
+                cursor.execute(query, values)
+                favorite_db = cursor.fetchone()
 
-            query = "SELECT id,user_id,tourist_place_id FROM Favorites WHERE id = %s"
-            values = (last_inserted_id,)
-            cursor.execute(query, values)
-            favorite_db = cursor.fetchone()
+                tourist_place_request = main_pb2.TouristPlacesFilterRequest(
+                    tourist_place_id=favorite_db["tourist_place_id"],
+                    place_type_filter="FILTER_BY_TOURIST_PLACE_ID",
+                )
 
-            tourist_place_request = main_pb2.TouristPlacesFilterRequest(
-                tourist_place_id=favorite_db["tourist_place_id"],
-                place_type_filter="FILTER_BY_TOURIST_PLACE_ID",
-            )
+                tourist_place_pb2 = get_tourist_places_by_filter(tourist_place_request)
+                favorite_pb2 = main_pb2.FavoritePlace(
+                    id=last_inserted_id,
+                    tourist_place=tourist_place_pb2.tourist_places[0],
+                )
 
-            tourist_place_pb2 = get_tourist_places_by_filter(tourist_place_request)
-            favorite_pb2 = main_pb2.FavoritePlace(
-                id=last_inserted_id, tourist_place=tourist_place_pb2
-            )
-
-            return favorite_pb2
+                return favorite_pb2
 
     except db_conn2.Error as e:
         raise e
@@ -272,18 +286,29 @@ def add_user_favorite_place(request):
 def get_user_favorite_places(request):
     try:
         with db_conn2.cursor() as cursor:
+            user_id = request.id
+            check_for_user(user_id)
             sql = "SELECT id,tourist_place_id FROM Favorites WHERE user_id=(%s)"
             val = (request.id,)
             cursor.execute(sql, val)
-            result = cursor.fetchall()
-            if len(result) == 0:
-                raise Exception("User dont have any favorites")
+            favorite_places_db = cursor.fetchall()
             favorites_list = []
-            for row in result:
-                request = pb2.TouristPlaceId(id=row[1])
-                tourist_place = get_tourist_place_by_id(request)
-                favorite = {"id": row[0], "tourist_place": tourist_place}
-                favorites_list.append(favorite)
+            for place in favorite_places_db:
+                place_request = main_pb2.TouristPlacesFilterRequest(
+                    tourist_place_id=place["tourist_place_id"],
+                    place_type_filter="FILTER_BY_TOURIST_PLACE_ID",
+                )
+                places_pb2 = get_tourist_places_by_filter(place_request)
+                favorites_list.append(
+                    main_pb2.FavoritePlace(
+                        id=place["tourist_place_id"],
+                        tourist_place=places_pb2.tourist_places[0],
+                    )
+                )
+            return main_pb2.FavoritePlacesList(favorites=favorites_list)
+
+            # favorite = {"id": row[0], "tourist_place": tourist_place}
+            # favorites_list.append(favorite)
             return pb2.Favorites(favorites=favorites_list)
     except db_conn2.Error as e:
         raise e
