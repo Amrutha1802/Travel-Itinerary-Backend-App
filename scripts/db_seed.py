@@ -4,7 +4,7 @@ import sys
 sys.path.append("..")
 
 from itinerary.db_config import db_conn2
-from generated import main_pb2
+from gen import main_pb2
 
 
 def populate_state_types():
@@ -13,10 +13,16 @@ def populate_state_types():
             cursor = db_conn2.cursor()
             for key in main_pb2.StateType.keys():
                 # TODO: Check if state type exist in the db
-                query = "INSERT INTO State_Types(type) values(%s)"
-                val = (key,)
-                cursor.execute(query, val)
-                db_conn2.commit()
+                check_type_query = "SELECT 1 FROM State_Types where type=(%s)"
+                cursor.execute(check_type_query, (key,))
+                state_type_db = cursor.fetchone()
+                if state_type_db is not None:
+                    query = "INSERT INTO State_Types(type) values(%s)"
+                    val = (key,)
+                    cursor.execute(query, val)
+                    db_conn2.commit()
+                else:
+                    print("State type with given type already exists in the database")
     except Exception as e:
         raise e
 
@@ -38,7 +44,7 @@ def populate_states():
                     state_type = state["type"]
                     state_type_id = state_types.get(state_type, UT_TYPE_ID)
                     # TODO: Check if a row exists for this state
-                    # Insert only if there is state in the DB
+                    # Insert only if there is no state in the DB with the name
                     query = "INSERT INTO States(name,image_url,description,state_type_id) values(%s,%s,%s,%s)"
                     val = (
                         state["name"],
@@ -52,5 +58,5 @@ def populate_states():
         raise
 
 
-# populate_state_types()
-# populate_states("db.json")
+populate_state_types()
+populate_states()

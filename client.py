@@ -163,16 +163,16 @@ if __name__ == "__main__":
     #     print(i)
 
     # add to favorites of user
-    request = pb2.AddFavoritePlaceRequest(user_id=1, tourist_place_id=5)
-    print(request)
-    response = client.add_user_favorite_place(request)
-    print(response)
+    # request = pb2.AddFavoritePlaceRequest(user_id=1, tourist_place_id=5)
+    # print(request)
+    # response = client.add_user_favorite_place(request)
+    # print(response)
 
     # get user favorites
-    # request = pb2.User(id=1)
-    # response = client.get_user_favorite_places(request)
-    # for i in response.favorites:
-    #     print(i)
+    request = pb2.User(id=104)
+    response = client.get_user_favorite_places(request)
+    for i in response.favorites:
+        print(i)
 
     # get user statueses
     # request = pb2.EmptyRequest()

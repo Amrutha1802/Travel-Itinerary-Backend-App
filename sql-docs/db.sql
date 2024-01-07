@@ -91,4 +91,11 @@ CREATE TABLE Expenses(
     FOREIGN KEY(category_id) REFERENCES Expense_Categories(id)
 );
 
+--INSERTION QUERIES
+
+INSERT INTO Users(name,email,status) values("Amrutha","amrutha.mothajigari@gmail.com","ACTIVE");
+INSERT INTO Users(name,email,status) values("Varsha","varsha.mothajigari@gmail.com","ACTIVE");
+
+
+
 

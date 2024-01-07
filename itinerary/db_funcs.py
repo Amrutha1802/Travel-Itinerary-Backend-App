@@ -274,8 +274,11 @@ def add_user_favorite_place(request):
                     id=last_inserted_id,
                     tourist_place=tourist_place_pb2.tourist_places[0],
                 )
-
                 return favorite_pb2
+            else:
+                raise Exception(
+                    "The given toruist place is already present in favorites of given user"
+                )
 
     except db_conn2.Error as e:
         raise e
@@ -309,7 +312,36 @@ def get_user_favorite_places(request):
 
             # favorite = {"id": row[0], "tourist_place": tourist_place}
             # favorites_list.append(favorite)
-            return pb2.Favorites(favorites=favorites_list)
+    except db_conn2.Error as e:
+        raise e
+    except Exception as e:
+        raise e
+
+
+def check_for_favorite_place(favorite_place_id):
+    try:
+        with db_conn2.cursor() as cursor:
+            query = "SELECT 1 FROM Favorites where id=(%s)"
+            cursor.execute(query, (id,))
+            place_db = cursor.fetchone()
+            if place_db is None:
+                raise Exception("Favorite Place with given id donot exist")
+    except db_conn2.Error as e:
+        raise e
+    except Exception as e:
+        raise e
+
+
+def delete_user_favorite_place(request):
+    try:
+        with db_conn2.cursor() as cursor:
+            favorite_place_id = request.id
+            check_for_favorite_place(favorite_place_id)
+            sql = "DELETE FROM Favorites WHERE id=(%s)"
+            val = (favorite_place_id,)
+            cursor.execute(sql, val)
+            db_conn2.commit()
+            return main_pb2.EmptyResponse()
     except db_conn2.Error as e:
         raise e
     except Exception as e:
