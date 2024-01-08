@@ -363,6 +363,7 @@ def get_user_favorite_places(request):
             favorites_list = []
 
             for place in favorite_places_db:
+                # retrieve details of the tourist place with given id
                 place_request = main_pb2.TouristPlacesFilterRequest(
                     tourist_place_id=place["tourist_place_id"],
                     place_type_filter="FILTER_BY_TOURIST_PLACE_ID",
