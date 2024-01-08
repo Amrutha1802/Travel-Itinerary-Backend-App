@@ -135,7 +135,7 @@ def get_states_by_filter(request):
                 states_db = cursor.fetchall()
 
             else:
-                raise Exception("Undefined Filter type")
+                raise Exception("Cannot filter states based on given Filter type")
 
             states_list = [
                 {
@@ -189,16 +189,18 @@ def get_tourist_places_by_filter(request):
                     raise Exception("State with given id donot exist in the database")
 
                 places_query = """SELECT Tourist_Places.id, Tourist_Places.name, Tourist_Places.state_id, Tourist_Places.image_url,
-                    Tourist_Places.description, Tourist_Places.review, States.name as state_name
-                    FROM Tourist_Places
-                    INNER JOIN States ON Tourist_Places.state_id = States.id
-                    WHERE Tourist_Places.state_id = (%s)
-                """
+                                Tourist_Places.description, Tourist_Places.review, States.name as state_name
+                                FROM Tourist_Places
+                                INNER JOIN States ON Tourist_Places.state_id = States.id
+                                WHERE Tourist_Places.state_id = (%s)
+                            """
                 cursor.execute(places_query, (state_id,))
                 places_db = cursor.fetchall()
 
             else:
-                raise Exception("Undefined Filter type")
+                raise Exception(
+                    "Cannot filter tourist places based on given Filter type"
+                )
 
             places_list = [
                 {
@@ -519,7 +521,7 @@ def create_user_itinerary(request):
                 )
                 expenses_pb2.append(expense)
 
-            # calculate remaining budger
+            # calculate remaining budget
             expenses_query = "SELECT sum(amount) FROM Expenses WHERE itinerary_id=(%s)"
             cursor.execute(expenses_query, (itinerary_id,))
             total_expenses = cursor.fetchone()

@@ -151,12 +151,12 @@ if __name__ == "__main__":
     # print("type is", type)
 
     # get_states_by_filter (id)
-    # request = pb2.StateFilterRequest(
-    #     state_id=4, place_type_filter="FILTER_BY_STATE_ID", type="STATE"
-    # )
-    # response = client.get_states_by_filter(request)
-    # for i in response.states:
-    #     print(i)
+    request = pb2.StateFilterRequest(
+        state_id=4, place_type_filter="FILTER_BY_STATE_TYPE", type="UNION_TERRITORY"
+    )
+    response = client.get_states_by_filter(request)
+    for i in response.states:
+        print(i)
 
     # get states by filter(type)
     # request = pb2.StateFilterRequest(
@@ -167,15 +167,15 @@ if __name__ == "__main__":
     #     print(i)
 
     # get tourist places by filter
-    request = pb2.TouristPlacesFilterRequest(
-        tourist_place_id=88, place_type_filter=1, state_id=1
-    )
-    response = client.get_tourist_places_by_filter(request)
-    for i in response.tourist_places:
-        print(i)
+    # request = pb2.TouristPlacesFilterRequest(
+    #     tourist_place_id=88, place_type_filter=1, state_id=1
+    # )
+    # response = client.get_tourist_places_by_filter(request)
+    # for i in response.tourist_places:
+    #     print(i)
 
     # add to favorites of user
-    # request = pb2.AddFavoritePlaceRequest(user_id=4, tourist_place_id=35)
+    # request = pb2.AddFavoritePlaceRequest(user_id=4, tourist_place_id=36)
     # response = client.add_user_favorite_place(request)
     # print("response is", response.place)
 
