@@ -60,30 +60,18 @@ def create_user(request):
         raise e
 
 
-def get_state_type_from_id(state_type_id):
-    """
-    Retreives state_type based on the given id
-    """
-    try:
-        with db_conn2.cursor() as cursor:
-            type_query = "SELECT type FROM State_Types WHERE id=(%s)"
-            cursor.execute(type_query, (state_type_id,))
-            type_db = cursor.fetchone()
-            if type_db is None:
-                raise Exception("StateType with given type_id donot exist")
-            return type_db["type"]
-    except:
-        raise
-
-
 def get_all_states():
     """
     Retrieve information about all states from the database.
     """
     try:
         with db_conn2.cursor() as cursor:
-            query = "SELECT id,name,image_url,description,state_type_id FROM States"
-            cursor.execute(query)
+            state_query = """
+                    SELECT States.id, States.name, States.image_url, States.description, State_Types.type
+                    FROM States
+                    INNER JOIN State_Types ON States.state_type_id = State_Types.id
+                """
+            cursor.execute(state_query)
             states_db = cursor.fetchall()
             states_list = [
                 {
@@ -91,7 +79,7 @@ def get_all_states():
                     "name": state["name"],
                     "image_url": state["image_url"],
                     "description": state["description"],
-                    "type": get_state_type_from_id(state["state_type_id"]),
+                    "type": state["type"],
                 }
                 for state in states_db
             ]
@@ -116,10 +104,13 @@ def get_states_by_filter(request):
         with db_conn2.cursor() as cursor:
             place_type_filter = request.place_type_filter
 
-            # if place_type_filter is FILTER_BY_STATE_ID ,retreive the state with given state_id
+            # if place_type_filter is FILTER_BY_STATE_ID ,retreive the state with given id
             if place_type_filter == main_pb2.FILTER_BY_STATE_ID:
                 state_id = request.state_id
-                state_query = "SELECT id,name,image_url,description,state_type_id FROM States where id=(%s)"
+                state_query = """SELECT States.id,States.name,States.image_url,States.description,State_Types.type
+                                FROM States 
+                                INNER JOIN State_Types ON States.state_type_id = State_Types.id 
+                                WHERE States.id = (%s)"""
                 values = (state_id,)
                 cursor.execute(state_query, values)
                 states_db = cursor.fetchall()
@@ -135,26 +126,16 @@ def get_states_by_filter(request):
                 if state_type == "UNDEFINED_STATE_TYPE":
                     raise Exception("Provided undefined_state_type")
 
-                # retreive the state_type_id for given state_type
-                type_query = "SELECT id from State_Types where type=(%s)"
+                state_query = """SELECT States.id, States.name, States.image_url, States.description, State_Types.type
+                                FROM States 
+                                INNER JOIN State_Types ON States.state_type_id = State_Types.id 
+                                WHERE State_Types.type = (%s)"""
                 values = (state_type,)
-                cursor.execute(type_query, values)
-                type_id_db = cursor.fetchone()
-
-                states_query = "SELECT id,name,image_url,description,state_type_id FROM States where state_type_id=(%s)"
-                cursor.execute(states_query, (type_id_db["id"],))
+                cursor.execute(state_query, values)
                 states_db = cursor.fetchall()
 
             else:
                 raise Exception("Undefined Filter type")
-
-            # if there are no states based on the given filter
-            if len(states_db) == 0:
-                return main_pb2.StatesFilterResponse(states=[])
-
-            # retreive the state_type based on type_id from State_Types table
-            state = states_db[0]
-            state_type = get_state_type_from_id(state["state_type_id"])
 
             states_list = [
                 {
@@ -162,7 +143,7 @@ def get_states_by_filter(request):
                     "name": state["name"],
                     "image_url": state["image_url"],
                     "description": state["description"],
-                    "type": state_type,
+                    "type": state["type"],
                 }
                 for state in states_db
             ]
@@ -170,22 +151,6 @@ def get_states_by_filter(request):
             return states_pb2
     except:
         raise
-
-
-def get_state_name_from_id(state_id):
-    """
-    Retrieve the name of a state from the database based on the provided state ID.
-    """
-    try:
-        with db_conn2.cursor() as cursor:
-            query = "SELECT name from States where id=(%s)"
-            cursor.execute(query, (state_id,))
-            state_db = cursor.fetchone()
-            return state_db["name"]
-    except db_conn2.Error as e:
-        raise e
-    except Exception as e:
-        raise e
 
 
 def get_tourist_places_by_filter(request):
@@ -200,7 +165,12 @@ def get_tourist_places_by_filter(request):
             place_type_filter = request.place_type_filter
             if place_type_filter == main_pb2.FILTER_BY_TOURIST_PLACE_ID:
                 tourist_place_id = request.tourist_place_id
-                query = "SELECT id,name,state_id,image_url,description,review FROM Tourist_Places where id=(%s)"
+                query = """SELECT Tourist_Places.id, Tourist_Places.name, Tourist_Places.image_url,
+                        Tourist_Places.description, Tourist_Places.review, States.name as state_name
+                        FROM Tourist_Places
+                        INNER JOIN States ON Tourist_Places.state_id = States.id
+                        WHERE Tourist_Places.id = (%s)
+                        """
                 values = (tourist_place_id,)
                 cursor.execute(query, values)
                 places_db = cursor.fetchall()
@@ -218,26 +188,23 @@ def get_tourist_places_by_filter(request):
                 if state_db is None:
                     raise Exception("State with given id donot exist in the database")
 
-                places_query = "SELECT id,name,state_id,image_url,description,review FROM Tourist_Places where state_id=(%s)"
+                places_query = """SELECT Tourist_Places.id, Tourist_Places.name, Tourist_Places.state_id, Tourist_Places.image_url,
+                    Tourist_Places.description, Tourist_Places.review, States.name as state_name
+                    FROM Tourist_Places
+                    INNER JOIN States ON Tourist_Places.state_id = States.id
+                    WHERE Tourist_Places.state_id = (%s)
+                """
                 cursor.execute(places_query, (state_id,))
                 places_db = cursor.fetchall()
 
             else:
                 raise Exception("Undefined Filter type")
 
-            # if there are no tourist_places based on the given filter
-            if len(places_db) == 0:
-                return main_pb2.TouristPlacesFilterResponse(tourist_places=[])
-
-            # retreive the name of state in which tourist place is present using state_id
-            place = places_db[0]
-            state_name = get_state_name_from_id(place["state_id"])
-
             places_list = [
                 {
                     "id": place["id"],
                     "name": place["name"],
-                    "state_name": state_name,
+                    "state_name": place["state_name"],
                     "image_url": place["image_url"],
                     "description": place["description"],
                     "review": place["review"],

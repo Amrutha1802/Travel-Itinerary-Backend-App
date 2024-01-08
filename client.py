@@ -152,7 +152,7 @@ if __name__ == "__main__":
 
     # get_states_by_filter (id)
     # request = pb2.StateFilterRequest(
-    #     place_type_filter="FILTER_BY_STATE_TYPE", type="UNION_TERRITORY"
+    #     state_id=4, place_type_filter="FILTER_BY_STATE_ID", type="STATE"
     # )
     # response = client.get_states_by_filter(request)
     # for i in response.states:
@@ -167,13 +167,12 @@ if __name__ == "__main__":
     #     print(i)
 
     # get tourist places by filter
-    # request = pb2.TouristPlacesFilterRequest(
-    #     tourist_place_id=589, place_type_filter=1, state_id=3
-    # )
-    # response = client.get_tourist_places_by_filter(request)
-    # print("response is", response.tourist_places)
-    # for i in response.tourist_places:
-    #     print(i)
+    request = pb2.TouristPlacesFilterRequest(
+        tourist_place_id=88, place_type_filter=1, state_id=1
+    )
+    response = client.get_tourist_places_by_filter(request)
+    for i in response.tourist_places:
+        print(i)
 
     # add to favorites of user
     # request = pb2.AddFavoritePlaceRequest(user_id=4, tourist_place_id=35)
@@ -187,9 +186,9 @@ if __name__ == "__main__":
     #     print(i)
 
     # delete from favorites
-    request = pb2.FavoritePlace(id=11)
-    response = client.delete_user_favorite(request)
-    print("res is ", response)
+    # request = pb2.FavoritePlace(id=11)
+    # response = client.delete_user_favorite(request)
+    # print("res is ", response)
 
     # create user itinerary
 
