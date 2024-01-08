@@ -135,12 +135,14 @@ message Itinerary {
 }
 
 message CreateUserItineraryRequest {
-  int32 state_id = 1;
-  google.protobuf.Timestamp start_date = 2;
-  google.protobuf.Timestamp end_date = 3;
-  int32 user_id = 4;
+  int32 user_id = 1;
+  int32 state_id = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
   double budget = 5;
   string notes = 6;
+  repeated ItineraryPlace itinerary_places = 7;
+  repeated Expense expenses = 8;
 }
 
 message CreateUserItineraryResponse { Itinerary itinerary = 1; }

@@ -96,6 +96,15 @@ CREATE TABLE Expenses(
 INSERT INTO Users(name,email,status) values("Amrutha","amrutha.mothajigari@gmail.com","ACTIVE");
 INSERT INTO Users(name,email,status) values("Varsha","varsha.mothajigari@gmail.com","ACTIVE");
 
-
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(1,2);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(1,12);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(1,32);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(1,52);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(1,23);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(1,28);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(2,4);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(2,5);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(2,6);
+INSERT INTO Favorites(user_id,tourist_place_id) VALUES(2,27);
 
 

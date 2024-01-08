@@ -30,6 +30,14 @@ class ItineraryAppServer(pb2_grpc.ItineraryServicesServicer):
         response = db_funcs.get_user_favorite_places(request)
         return response
 
+    def DeleteUserFavoritePlace(self, request, context):
+        response = db_funcs.delete_user_favorite_place(request)
+        return response
+
+    def CreateUserItinerary(self, request, context):
+        response = db_funcs.create_user_itinerary(request)
+        return response
+
     def GetStateTypes(self, request, context):
         response = get_state_types()
         return response

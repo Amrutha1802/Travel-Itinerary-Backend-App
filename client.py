@@ -41,6 +41,10 @@ class ItineraryClient(object):
         response = self.stub.GetUserFavoritePlaces(request)
         return response
 
+    def create_user_itinerary(self, request):
+        response = self.stub.CreateUserItinerary(request)
+        return response
+
     def get_states_by_type(self, request):
         response = self.stub.GetStatesByType(request)
         return response
@@ -69,8 +73,8 @@ class ItineraryClient(object):
         response = self.stub.GetFavoritesOfUser(request)
         return response
 
-    def delete_from_favorites_of_user(self, request):
-        response = self.stub.DeleteFromFavoritesOfUser(request)
+    def delete_user_favorite(self, request):
+        response = self.stub.DeleteUserFavoritePlace(request)
         return response
 
     def add_itinerary(self, request):
@@ -130,8 +134,8 @@ if __name__ == "__main__":
     client = ItineraryClient()
     # create user
     # request = pb2.User(
-    #     name="User4",
-    #     email="user4@gmail.com",
+    #     name="User6",
+    #     email="user6@gmail.com",
     # )
     # response = client.create_user(request)
     # print(response)
@@ -146,9 +150,17 @@ if __name__ == "__main__":
     # type = pb2.StateType.Name(2)
     # print("type is", type)
 
-    # get_states_by_filter
+    # get_states_by_filter (id)
     # request = pb2.StateFilterRequest(
-    #     state_id=19, place_type_filter="FILTER_BY_STATE_ID", type="STATE"
+    #     place_type_filter="FILTER_BY_STATE_TYPE", type="UNION_TERRITORY"
+    # )
+    # response = client.get_states_by_filter(request)
+    # for i in response.states:
+    #     print(i)
+
+    # get states by filter(type)
+    # request = pb2.StateFilterRequest(
+    #     place_type_filter="FILTER_BY_STATE_TYPE", type="STATE"
     # )
     # response = client.get_states_by_filter(request)
     # for i in response.states:
@@ -156,23 +168,78 @@ if __name__ == "__main__":
 
     # get tourist places by filter
     # request = pb2.TouristPlacesFilterRequest(
-    #     tourist_place_id=5678, state_id=2, place_type_filter=2
+    #     tourist_place_id=589, place_type_filter=1, state_id=3
     # )
     # response = client.get_tourist_places_by_filter(request)
+    # print("response is", response.tourist_places)
     # for i in response.tourist_places:
     #     print(i)
 
     # add to favorites of user
-    # request = pb2.AddFavoritePlaceRequest(user_id=1, tourist_place_id=5)
-    # print(request)
+    # request = pb2.AddFavoritePlaceRequest(user_id=4, tourist_place_id=35)
     # response = client.add_user_favorite_place(request)
-    # print(response)
+    # print("response is", response.place)
 
     # get user favorites
-    request = pb2.User(id=104)
-    response = client.get_user_favorite_places(request)
-    for i in response.favorites:
-        print(i)
+    # request = pb2.User(id=4)
+    # response = client.get_user_favorite_places(request)
+    # for i in response.favorites:
+    #     print(i)
+
+    # delete from favorites
+    request = pb2.FavoritePlace(id=11)
+    response = client.delete_user_favorite(request)
+    print("res is ", response)
+
+    # create user itinerary
+
+    # from google.protobuf.timestamp_pb2 import Timestamp
+
+    # request = pb2.CreateUserItineraryRequest(
+    #     budget=26222,
+    #     end_date=Timestamp(seconds=-1295020477, nanos=698),
+    #     notes="sed dolor ad eiusmod exercitation",
+    #     start_date=Timestamp(seconds=427304120, nanos=4103529),
+    #     state_id=1,
+    #     user_id=1,
+    #     expenses=[
+    #         {
+    #             "amount": 986,
+    #             "description": "laborum nisi voluptate",
+    #             "expense_category": 0,
+    #         },
+    #         {
+    #             "description": "in eiusmod in ipsum id",
+    #             "expense_category": 3,
+    #             "amount": 123,
+    #         },
+    #     ],
+    #     itinerary_places=[
+    #         {
+    #             "tourist_place": {
+    #                 "id": 23,
+    #             },
+    #             "end_time": Timestamp(seconds=99196, nanos=-7930543),
+    #             "start_time": Timestamp(seconds=8678, nanos=2076311),
+    #             "visit_date": Timestamp(seconds=3, nanos=-112269279),
+    #         },
+    #         {
+    #             "tourist_place": {
+    #                 "id": 2,
+    #             },
+    #             "end_time": Timestamp(seconds=9169, nanos=-7058143),
+    #             "start_time": Timestamp(seconds=71427, nanos=20728611),
+    #             "visit_date": Timestamp(seconds=3, nanos=-112269279),
+    #         },
+    #     ],
+    # )
+    # for i in request.itinerary_places:
+    #     print(i.tourist_place.id)
+    # print("request is ", type(request.itinerary_places))
+
+    # # print("request is ", request.itinerary_places[1]["tourist_place"])
+    # response = client.create_user_itinerary(request)
+    # print(response)
 
     # get user statueses
     # request = pb2.EmptyRequest()

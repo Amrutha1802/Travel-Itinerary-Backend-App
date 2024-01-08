@@ -4,6 +4,7 @@ sys.path.append("..")
 
 from itinerary.db_config import db_conn2
 from gen import main_pb2
+from .time_funcs import get_date_string, get_time_from_timestamp
 
 
 def create_user(request):
@@ -31,7 +32,7 @@ def create_user(request):
             cursor.execute(query, (email,))
             result = cursor.fetchone()
             if result is not None:
-                raise Exception("User with given email id already exists")
+                raise Exception("User with given email id already exists ")
 
             query = "INSERT INTO Users(name,email,status) VALUES(%s,%s,%s)"
             values = (name, email, status)
@@ -60,6 +61,9 @@ def create_user(request):
 
 
 def get_state_type_from_id(state_type_id):
+    """
+    Retreives state_type based on the given id
+    """
     try:
         with db_conn2.cursor() as cursor:
             type_query = "SELECT type FROM State_Types WHERE id=(%s)"
@@ -73,6 +77,9 @@ def get_state_type_from_id(state_type_id):
 
 
 def get_all_states():
+    """
+    Retrieve information about all states from the database.
+    """
     try:
         with db_conn2.cursor() as cursor:
             query = "SELECT id,name,image_url,description,state_type_id FROM States"
@@ -98,15 +105,23 @@ def get_all_states():
 
 
 def get_states_by_filter(request):
+    """
+    Retrieve states from the database based on the specified filter in the request.
+    The function supports two filter types:
+    1. FILTER_BY_STATE_ID: Retrieves a single state based on the provided state ID.
+    2. FILTER_BY_STATE_TYPE: Retrieves states based on the provided state type.
+
+    """
     try:
         with db_conn2.cursor() as cursor:
             place_type_filter = request.place_type_filter
 
+            # if place_type_filter is FILTER_BY_STATE_ID ,retreive the state with given state_id
             if place_type_filter == main_pb2.FILTER_BY_STATE_ID:
-                id = request.state_id
-                query = "SELECT id,name,image_url,description,state_type_id FROM States where id=(%s)"
-                values = (id,)
-                cursor.execute(query, values)
+                state_id = request.state_id
+                state_query = "SELECT id,name,image_url,description,state_type_id FROM States where id=(%s)"
+                values = (state_id,)
+                cursor.execute(state_query, values)
                 states_db = cursor.fetchall()
 
                 if len(states_db) == 0:
@@ -114,8 +129,13 @@ def get_states_by_filter(request):
                         "State with given id is not present in the database"
                     )
 
+            # if place_type_filter is FILTER_BY_STATE_TYPE ,retreive states with given state_type
             elif place_type_filter == main_pb2.FILTER_BY_STATE_TYPE:
                 state_type = main_pb2.StateType.Name(request.type)
+                if state_type == "UNDEFINED_STATE_TYPE":
+                    raise Exception("Provided undefined_state_type")
+
+                # retreive the state_type_id for given state_type
                 type_query = "SELECT id from State_Types where type=(%s)"
                 values = (state_type,)
                 cursor.execute(type_query, values)
@@ -128,6 +148,11 @@ def get_states_by_filter(request):
             else:
                 raise Exception("Undefined Filter type")
 
+            # if there are no states based on the given filter
+            if len(states_db) == 0:
+                return main_pb2.StatesFilterResponse(states=[])
+
+            # retreive the state_type based on type_id from State_Types table
             state = states_db[0]
             state_type = get_state_type_from_id(state["state_type_id"])
 
@@ -148,6 +173,9 @@ def get_states_by_filter(request):
 
 
 def get_state_name_from_id(state_id):
+    """
+    Retrieve the name of a state from the database based on the provided state ID.
+    """
     try:
         with db_conn2.cursor() as cursor:
             query = "SELECT name from States where id=(%s)"
@@ -161,6 +189,12 @@ def get_state_name_from_id(state_id):
 
 
 def get_tourist_places_by_filter(request):
+    """
+    Retrieve tourist places from the database based on the specified filter in the request.
+    The function supports two filter types:
+    1. FILTER_BY_TOURIST_PLACE_ID: Retrieves a single tourist place based on the provided tourist place ID.
+    2. FILTER_BY_STATE_ID: Retrieves tourist places based on the provided state ID.
+    """
     try:
         with db_conn2.cursor() as cursor:
             place_type_filter = request.place_type_filter
@@ -170,19 +204,32 @@ def get_tourist_places_by_filter(request):
                 values = (tourist_place_id,)
                 cursor.execute(query, values)
                 places_db = cursor.fetchall()
+
+                # check if tourist_place with given id exists in the database
                 if len(places_db) == 0:
                     raise Exception("Tourist Place with given id donot exist")
 
             elif place_type_filter == main_pb2.FILTER_BY_STATE_ID:
                 state_id = request.state_id
-                query = "SELECT id,name,state_id,image_url,description,review FROM Tourist_Places where state_id=(%s)"
-                cursor.execute(query, (state_id,))
+                # check if state with given id exists in the database
+                state_query = "SELECT 1 from States where id=(%s)"
+                cursor.execute(state_query, (state_id,))
+                state_db = cursor.fetchone()
+                if state_db is None:
+                    raise Exception("State with given id donot exist in the database")
+
+                places_query = "SELECT id,name,state_id,image_url,description,review FROM Tourist_Places where state_id=(%s)"
+                cursor.execute(places_query, (state_id,))
                 places_db = cursor.fetchall()
-                print("places are ", places_db)
 
             else:
                 raise Exception("Undefined Filter type")
 
+            # if there are no tourist_places based on the given filter
+            if len(places_db) == 0:
+                return main_pb2.TouristPlacesFilterResponse(tourist_places=[])
+
+            # retreive the name of state in which tourist place is present using state_id
             place = places_db[0]
             state_name = get_state_name_from_id(place["state_id"])
 
@@ -207,6 +254,9 @@ def get_tourist_places_by_filter(request):
 
 
 def check_for_user(user_id):
+    """
+    Check if a user with the provided user ID exists in the database.
+    """
     try:
         with db_conn2.cursor() as cursor:
             query = "SELECT 1 FROM Users where id=(%s)"
@@ -220,11 +270,14 @@ def check_for_user(user_id):
         raise e
 
 
-def check_for_tourist_place(id):
+def check_for_tourist_place(tourist_place_id):
+    """
+    Check if a tourist place with the provided ID exists in the database.
+    """
     try:
         with db_conn2.cursor() as cursor:
             query = "SELECT 1 FROM Tourist_Places where id=(%s)"
-            cursor.execute(query, (id,))
+            cursor.execute(query, (tourist_place_id,))
             place_db = cursor.fetchone()
             if place_db is None:
                 raise Exception("TouristPlace with given id donot exist")
@@ -235,22 +288,26 @@ def check_for_tourist_place(id):
 
 
 def add_user_favorite_place(request):
+    """
+    Add a tourist place to the user's favorites in the database.
+    """
     try:
         with db_conn2.cursor() as cursor:
             user_id = request.user_id
             tourist_place_id = request.tourist_place_id
-            print("user id is ", user_id)
-            print("tourist place id is ", tourist_place_id)
+            # check if user with given id exists in the database
             check_for_user(user_id)
+            # check if tourist place with given id exists in the database
             check_for_tourist_place(tourist_place_id)
 
-            # idempodency
+            # idempodency- insert into favorites if tourist place with given id is not present in the database
             query = (
                 "SELECT 1 FROM Favorites where user_id=(%s) and tourist_place_id=(%s)"
             )
             values = (user_id, tourist_place_id)
             cursor.execute(query, values)
             favorite_place_db = cursor.fetchone()
+
             if favorite_place_db is None:
                 query = "INSERT INTO Favorites(user_id,tourist_place_id) VALUES(%s,%s)"
                 values = (user_id, tourist_place_id)
@@ -264,20 +321,23 @@ def add_user_favorite_place(request):
                 cursor.execute(query, values)
                 favorite_db = cursor.fetchone()
 
+                # retreive details of tourist place with given id
                 tourist_place_request = main_pb2.TouristPlacesFilterRequest(
                     tourist_place_id=favorite_db["tourist_place_id"],
                     place_type_filter="FILTER_BY_TOURIST_PLACE_ID",
                 )
-
                 tourist_place_pb2 = get_tourist_places_by_filter(tourist_place_request)
+
                 favorite_pb2 = main_pb2.FavoritePlace(
                     id=last_inserted_id,
                     tourist_place=tourist_place_pb2.tourist_places[0],
                 )
-                return favorite_pb2
+
+                return main_pb2.AddFavoritePlaceResponse(place=favorite_pb2)
+
             else:
                 raise Exception(
-                    "The given toruist place is already present in favorites of given user"
+                    "The given tourist place is already present in favorites of given user"
                 )
 
     except db_conn2.Error as e:
@@ -287,15 +347,21 @@ def add_user_favorite_place(request):
 
 
 def get_user_favorite_places(request):
+    """
+    Retrieve the list of favorite places for a user from the database.
+    """
     try:
         with db_conn2.cursor() as cursor:
             user_id = request.id
             check_for_user(user_id)
-            sql = "SELECT id,tourist_place_id FROM Favorites WHERE user_id=(%s)"
+            favorite_place_query = (
+                "SELECT id,tourist_place_id FROM Favorites WHERE user_id=(%s)"
+            )
             val = (request.id,)
-            cursor.execute(sql, val)
+            cursor.execute(favorite_place_query, val)
             favorite_places_db = cursor.fetchall()
             favorites_list = []
+
             for place in favorite_places_db:
                 place_request = main_pb2.TouristPlacesFilterRequest(
                     tourist_place_id=place["tourist_place_id"],
@@ -308,10 +374,9 @@ def get_user_favorite_places(request):
                         tourist_place=places_pb2.tourist_places[0],
                     )
                 )
+
             return main_pb2.FavoritePlacesList(favorites=favorites_list)
 
-            # favorite = {"id": row[0], "tourist_place": tourist_place}
-            # favorites_list.append(favorite)
     except db_conn2.Error as e:
         raise e
     except Exception as e:
@@ -319,10 +384,13 @@ def get_user_favorite_places(request):
 
 
 def check_for_favorite_place(favorite_place_id):
+    """
+    Check if a favorite place with the provided ID exists in the database.
+    """
     try:
         with db_conn2.cursor() as cursor:
             query = "SELECT 1 FROM Favorites where id=(%s)"
-            cursor.execute(query, (id,))
+            cursor.execute(query, (favorite_place_id,))
             place_db = cursor.fetchone()
             if place_db is None:
                 raise Exception("Favorite Place with given id donot exist")
@@ -333,14 +401,223 @@ def check_for_favorite_place(favorite_place_id):
 
 
 def delete_user_favorite_place(request):
+    """
+    Delete a favorite place from the user's favorites in the database.
+    """
     try:
         with db_conn2.cursor() as cursor:
             favorite_place_id = request.id
+            # check if favorite place with given id exists in database
             check_for_favorite_place(favorite_place_id)
-            sql = "DELETE FROM Favorites WHERE id=(%s)"
+
+            favorite_query = "DELETE FROM Favorites WHERE id=(%s)"
             val = (favorite_place_id,)
+            cursor.execute(favorite_query, val)
+            db_conn2.commit()
+
+            return main_pb2.EmptyResponse()
+
+    except db_conn2.Error as e:
+        raise e
+    except Exception as e:
+        raise e
+
+
+def check_for_state(state_id):
+    """
+    Check if a state with the provided ID exists in the database.
+    """
+    try:
+        with db_conn2.cursor() as cursor:
+            query = "SELECT 1 FROM States where id=(%s)"
+            cursor.execute(query, (state_id,))
+            place_db = cursor.fetchone()
+            if place_db is None:
+                raise Exception("State with given id donot exist")
+    except db_conn2.Error as e:
+        raise e
+    except Exception as e:
+        raise e
+
+
+def create_user_itinerary(request):
+    try:
+        with db_conn2.cursor() as cursor:
+            user_id = request.user_id
+            state_id = request.state_id
+            start_date = request.start_date
+            end_date = request.end_date
+            budget = request.budget
+            notes = request.notes
+            itinerary_places = request.itinerary_places
+            expenses = request.expenses
+            check_for_user(user_id)
+            check_for_state(state_id)
+
+            query = "INSERT INTO Itineraries(state_id,user_id,start_date,end_date,notes,budget) VALUES(%s,%s,%s,%s,%s,%s)"
+            values = (
+                state_id,
+                user_id,
+                get_date_string(start_date),
+                get_date_string(end_date),
+                notes,
+                budget,
+            )
+            cursor.execute(query, values)
+            itinerary_id = cursor.lastrowid
+            db_conn2.commit()
+
+            itinerary_query = "SELECT * FROM Itineraries where id=(%s)"
+            cursor.execute(itinerary_query, (itinerary_id,))
+            itinerary_db = cursor.fetchone()
+
+            state_request = main_pb2.StateFilterRequest(
+                state_id=itinerary_db["state_id"],
+                place_type_filter="FILTER_BY_STATE_ID",
+            )
+            state_db = get_states_by_filter(state_request)
+
+            itinerary_places_pb2 = []
+            # add itinerary places
+            # tourist_place
+
+            for place in itinerary_places:
+                # place validation
+                # date validation
+                query = "INSERT INTO Itinerary_Places(itinerary_id,tourist_place_id,start_time,end_time,visit_date) VALUES(%s,%s,%s,%s,%s)"
+                values = (
+                    itinerary_id,
+                    place.tourist_place.id,
+                    get_time_from_timestamp(place.start_time),
+                    get_time_from_timestamp(place.end_time),
+                    get_date_string(place.visit_date),
+                )
+                cursor.execute(query, values)
+                db_conn2.commit()
+                itinerary_place_id = cursor.lastrowid
+                place_query = "SELECT id,itinerary_id,tourist_place_id,start_time,end_time,visit_date from Itinerary_Places where id=(%s)"
+                cursor.execute(place_query, (itinerary_place_id,))
+                itinerary_place_pb2 = cursor.fetchone()
+
+                tourist_place_request = main_pb2.TouristPlacesFilterRequest(
+                    tourist_place_id=place.tourist_place.id,
+                    place_type_filter="FILTER_BY_TOURIST_PLACE_ID",
+                )
+                tourist_place_pb2 = get_tourist_places_by_filter(tourist_place_request)
+
+                itinerary_place = main_pb2.ItineraryPlace(
+                    id=itinerary_place_pb2["id"],
+                    tourist_place=tourist_place_pb2.tourist_places[0],
+                    itinerary_id=itinerary_place_pb2["itinerary_id"],
+                    # start_time=itinerary_place_pb2["start_time"],
+                    # end_time=itinerary_place_pb2["end_time"],
+                    visit_date=itinerary_place_pb2["visit_date"],
+                )
+                itinerary_places_pb2.append(itinerary_place)
+
+            expenses_pb2 = []
+            # add expenses to itinerary
+            for expense in expenses:
+                expense_category = expense.expense_category
+                expense_description = expense.description
+                expense_amount = expense.amount
+
+                expense_category_id_query = (
+                    "SELECT id from ExpenseCategories where category=(%s)"
+                )
+                cursor.execute(expense_category_id_query, (expense_category,))
+                expense_category_db = cursor.fetchone()
+                expense_category_id = expense_category_db["id"]
+
+                expense_query = "INSERT INTO Expenses(category_id,itinerary_id,amount,description) VALUES(%s,%s,%s,%s)"
+                values = (
+                    expense_category_id,
+                    itinerary_id,
+                    expense_amount,
+                    expense_description,
+                )
+                cursor.execute(expense_query, values)
+                db_conn2.commit()
+                expense_id = cursor.lastrowid
+                place_query = "SELECT id,category_id,itinerary_id,amount where id=(%s)"
+                cursor.execute(place_query, (expense_id,))
+                expense_db = cursor.fetchone()
+
+                expense = main_pb2.Expense(
+                    id=expense_db["id"],
+                    category_id=expense_db["category_id"],
+                    itinerary_id=expense_db["itinerary_id"],
+                    description=expense_db["description"],
+                )
+                expenses_pb2.append(expense)
+
+            # calculate remaining budger
+            expenses_query = "SELECT sum(amount) FROM Expenses WHERE itinerary_id=(%s)"
+            cursor.execute(expenses_query, (itinerary_id,))
+            total_expenses = cursor.fetchone()
+            budget_query = "SELECT budget FROM Itineraries WHERE id=(%s)"
+            cursor.execute(budget_query, (itinerary_id,))
+            total_budget = cursor.fetchone()
+            if total_expenses[0] is None:
+                remaining_budget = total_budget[0]
+            remaining_budget = total_budget[0] - total_expenses[0]
+
+            itinerary_pb2 = main_pb2.Itinerary(
+                id=itinerary_db["id"],
+                state=state_db,
+                start_date=itinerary_db["start_date"],
+                end_date=itinerary_db["end_date"],
+                budget=itinerary_db["budget"],
+                notes=itinerary_db["notes"],
+                places=itinerary_places_pb2,
+                expenses=expenses_pb2,
+                remaining_budget=remaining_budget,
+            )
+            return itinerary_pb2
+
+    except db_conn2.Error as e:
+        raise e
+    except Exception as e:
+        raise e
+
+
+def check_for_itinerary(itinerary_id):
+    try:
+        with db_conn2.cursor() as cursor:
+            query = "SELECT 1 FROM Itineraries where id=(%s)"
+            cursor.execute(query, (itinerary_id,))
+            place_db = cursor.fetchone()
+            if place_db is None:
+                raise Exception("Itinerary with given id donot exist")
+    except db_conn2.Error as e:
+        raise e
+    except Exception as e:
+        raise e
+
+
+def delete_user_itinerary(request):
+    try:
+        with db_conn2.cursor() as cursor:
+            itinerary_id = request.id
+            check_for_itinerary(itinerary_id)
+            # remove itinerary_places of given itinerary
+            sql = "DELETE FROM ItineraryPlaces WHERE itinerary_id=(%s)"
+            val = (itinerary_id,)
             cursor.execute(sql, val)
             db_conn2.commit()
+
+            # remove expense of given itinerary
+            sql = "DELETE FROM Expenses WHERE itinerary_id=(%s)"
+            val = (itinerary_id,)
+            cursor.execute(sql, val)
+            db_conn2.commit()
+
+            # remove itinerary from itineraries table
+            sql = "DELETE FROM Itineraries WHERE id=(%s)"
+            val = (itinerary_id,)
+            cursor.execute(sql, val)
+            db_conn2.commit()
+
             return main_pb2.EmptyResponse()
     except db_conn2.Error as e:
         raise e
@@ -348,335 +625,130 @@ def delete_user_favorite_place(request):
         raise e
 
 
-# def check_for_user(user_id):
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT 1 FROM Users WHERE id=(%s)"
-#         cursor.execute(sql, (user_id,))
-#         result = cursor.fetchone()
-#         if result is None:
-#             raise Exception("User with given id donot exists")
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
+def update_user_itinerary(request):
+    try:
+        with db_conn2.cursor() as cursor:
+            itinerary_id = request.id
+            check_for_itinerary(itinerary_id)
+            budget = request.budget
+            notes = request.notes
 
+            # print("hiiiii")
+            # print("it", itinerary_places)
 
-# def create_user(request):
-#     try:
-#         if len(request.name) == 0:
-#             raise Exception("Name cannot be empty")
-#         check_for_email(request.email)
-#         cursor = db_conn.cursor()
-#         sql = "INSERT INTO Users(name, email, mobile_no, status_id) VALUES(%s, %s, %s, %s)"
-#         val = (
-#             request.name,
-#             request.email,
-#             request.mobile_no,
-#             1,
-#         )
-#         cursor.execute(sql, val)
-#         db_conn.commit()
-#         last_inserted_id = cursor.lastrowid
-#         sql = "SELECT name, email, mobile_no, status_id FROM Users WHERE id = %s"
-#         val = (last_inserted_id,)
-#         cursor.execute(sql, val)
-#         user = cursor.fetchone()
-#         return pb2.User(
-#             id=last_inserted_id,
-#             name=user[0],
-#             email=user[1],
-#             mobile_no=user[2],
-#             status="Active",
-#         )
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
+            query = "INSERT INTO Itineraries(state_id,user_id,start_date,end_date,notes,budget) VALUES(%s,%s,%s,%s,%s,%s)"
+            values = (
+                state_id,
+                user_id,
+                get_date_string(start_date),
+                get_date_string(end_date),
+                notes,
+                budget,
+            )
+            cursor.execute(query, values)
+            itinerary_id = cursor.lastrowid
+            db_conn2.commit()
 
+            itinerary_query = "SELECT * FROM Itineraries where id=(%s)"
+            cursor.execute(itinerary_query, (itinerary_id,))
+            itinerary_db = cursor.fetchone()
 
-# def get_user_statuses():
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT id,status FROM Status"
-#         cursor.execute(sql)
-#         result = cursor.fetchall()
-#         status_list = []
-#         for row in result:
-#             status = {"id": row[0], "status": row[1]}
-#             status_list.append(status)
-#         return pb2.Statuses(statuses=status_list)
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
+            state_request = main_pb2.StateFilterRequest(
+                state_id=itinerary_db["state_id"],
+                place_type_filter="FILTER_BY_STATE_ID",
+            )
+            state_db = get_states_by_filter(state_request)
 
+            itinerary_places_pb2 = []
+            # add itinerary places
+            # tourist_place
 
-# def get_all_states():
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT id,name,image_url,description,state_type_id FROM States"
-#         cursor.execute(sql)
-#         result = cursor.fetchall()
-#         states_list = []
-#         for row in result:
-#             sql = "SELECT type FROM State_Types WHERE id=(%s)"
-#             val = (row[4],)
-#             cursor.execute(sql, val)
-#             type_row = cursor.fetchone()
-#             state = {
-#                 "id": row[0],
-#                 "name": row[1],
-#                 "image_url": row[2],
-#                 "description": row[3],
-#                 "type": type_row[0],
-#             }
-#             states_list.append(state)
-#         return pb2.States(states=states_list)
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
+            for place in itinerary_places:
+                # place validation
+                # date validation
+                print("it", place)
+                query = "INSERT INTO ItineraryPlaces(itinerary_id,tourist_place_id,start_time,end_time,visit_date) VALUES(%s,%s,%s,%s,%s)"
+                values = (
+                    itinerary_id,
+                    place["tourist_place_id"],
+                    get_time_from_timestamp(place["start_time"]),
+                    get_time_from_timestamp(place["end_time"]),
+                    get_date_string(place["visit_date"]),
+                )
+                cursor.execute(query, values)
+                db_conn2.commit()
+                itinerary_place_id = cursor.lastrowid
+                place_query = "SELECT id,itinerary_id,tourist_place_id,start_time,end_time,visit_date where id=(%s)"
+                cursor.execute(place_query, (itinerary_place_id,))
+                itinerary_place_pb2 = cursor.fetchone()
 
+                tourist_place_request = main_pb2.TouristPlacesFilterRequest(
+                    tourist_place_id=place["tourist_place_id"],
+                    place_type_filter="FILTER_BY_TOURIST_PLACE_ID",
+                )
+                tourist_place_pb2 = get_tourist_places_by_filter(tourist_place_request)
+                itinerary_place = main_pb2.ItineraryPlace(
+                    id=itinerary_place_pb2["id"],
+                    tourist_place=tourist_place_pb2,
+                    itinerary_id=itinerary_place_pb2["itinerary_id"],
+                    start_time=itinerary_place_pb2["start_time"],
+                    end_time=itinerary_place_pb2["end_time"],
+                    visit_date=itinerary_place_pb2["visit_date"],
+                )
+                itinerary_places_pb2.append(itinerary_place)
 
-# def get_states_by_type(request):
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT 1 FROM State_Types WHERE id=(%s)"
-#         val = (request.id,)
-#         cursor.execute(sql, val)
-#         result = cursor.fetchone()
-#         if result is None:
-#             raise Exception("State-Type with given id donot exist")
-#         sql = "SELECT id,name,image_url,description,state_type_id FROM States WHERE state_type_id=(%s)"
-#         val = (request.id,)
-#         cursor.execute(sql, val)
-#         result = cursor.fetchall()
-#         states_list = []
-#         for row in result:
-#             sql = "SELECT type FROM State_Types WHERE id=(%s)"
-#             val = (row[4],)
-#             cursor.execute(sql, val)
-#             type_row = cursor.fetchone()
-#             state = {
-#                 "id": row[0],
-#                 "name": row[1],
-#                 "image_url": row[2],
-#                 "description": row[3],
-#                 "type": type_row[0],
-#             }
-#             states_list.append(state)
-#         return pb2.States(states=states_list)
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
+            expenses_pb2 = []
+            # add expenses to itinerary
+            for expense in expenses:
+                expense_category = expense.expense_category
+                expense_description = expense.description
+                expense_amount = expense.amount
 
+                expense_category_id_query = (
+                    "SELECT id from ExpenseCategories where category=(%s)"
+                )
+                cursor.execute(expense_category_id_query, (expense_category,))
+                expense_category_db = cursor.fetchone()
+                expense_category_id = expense_category_db["id"]
 
-# def get_state_types():
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT id,type FROM State_Types"
-#         cursor.execute(sql)
-#         result = cursor.fetchall()
-#         types_list = []
-#         for row in result:
-#             status = {"id": row[0], "type": row[1]}
-#             types_list.append(status)
-#         return pb2.StateTypes(state_types=types_list)
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
+                expense_query = "INSERT INTO Expenses(category_id,itinerary_id,amount,description) VALUES(%s,%s,%s,%s)"
+                values = (
+                    expense_category_id,
+                    itinerary_id,
+                    expense_amount,
+                    expense_description,
+                )
+                cursor.execute(expense_query, values)
+                db_conn2.commit()
+                expense_id = cursor.lastrowid
+                place_query = "SELECT id,category_id,itinerary_id,amount where id=(%s)"
+                cursor.execute(place_query, (expense_id,))
+                expense_db = cursor.fetchone()
 
+                expense = main_pb2.Expense(
+                    id=expense_db["id"],
+                    category_id=expense_db["category_id"],
+                    itinerary_id=expense_db["itinerary_id"],
+                    description=expense_db["description"],
+                )
+                expenses_pb2.append(expense)
 
-# def get_state_by_id(request):
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT id,name,image_url,description,state_type_id FROM States WHERE id=(%s)"
-#         val = (request.id,)
-#         cursor.execute(sql, val)
-#         state = cursor.fetchone()
-#         if state is None:
-#             raise Exception("State with given id donot exist")
-#         sql = "SELECT type FROM State_Types WHERE id=(%s)"
-#         val = (state[4],)
-#         cursor.execute(sql, val)
-#         state_type = cursor.fetchone()
-#         return pb2.State(
-#             id=state[0],
-#             name=state[1],
-#             image_url=state[2],
-#             description=state[3],
-#             type=state_type[0],
-#         )
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
+            itinerary_pb2 = main_pb2.Itinerary(
+                id=itinerary_db["id"],
+                state=state_db,
+                start_date=itinerary_db["start_date"],
+                end_date=itinerary_db["end_date"],
+                budget=itinerary_db["budget"],
+                notes=itinerary_db["notes"],
+                places=itinerary_places_pb2,
+                expenses=expenses_pb2,
+            )
+            return itinerary_pb2
 
-
-# def get_tourist_places_in_state(request):
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT name FROM States WHERE id=(%s)"
-#         val = (request.id,)
-#         cursor.execute(sql, val)
-#         state_name = cursor.fetchone()
-#         if state_name is None:
-#             raise Exception("State with given id donot exist")
-#         sql = "SELECT id,name,image_url,description,review FROM Tourist_Places WHERE state_id=(%s)"
-#         val = (request.id,)
-#         cursor.execute(sql, val)
-#         places = cursor.fetchall()
-#         tourist_places_list = []
-#         for row in places:
-#             place = {
-#                 "id": row[0],
-#                 "name": row[1],
-#                 "image_url": row[2],
-#                 "description": row[3],
-#                 "review": row[4],
-#                 "state_name": state_name[0],
-#             }
-#             tourist_places_list.append(place)
-#         return pb2.TouristPlaces(tourist_places=tourist_places_list)
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
-
-
-# def get_tourist_place_by_id(request):
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT id,name,image_url,description,state_id,review FROM Tourist_Places WHERE id=(%s)"
-#         val = (request.id,)
-#         cursor.execute(sql, val)
-#         place = cursor.fetchone()
-#         if place is None:
-#             raise Exception("Tourist Place with given id donot exist")
-#         sql = "SELECT name FROM States WHERE id=(%s)"
-#         val = (place[4],)
-#         cursor.execute(sql, val)
-#         state_type = cursor.fetchone()
-#         return pb2.TouristPlace(
-#             id=place[0],
-#             name=place[1],
-#             image_url=place[2],
-#             description=place[3],
-#             review=place[5],
-#             state_name=state_type[0],
-#         )
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
-
-
-# def add_to_favorites_of_user(request):
-#     try:
-#         cursor = db_conn.cursor()
-#         check_for_user(request.user_id)
-#         sql = "SELECT id,name,state_id,image_url,description,review FROM Tourist_Places WHERE id = %s"
-#         val = (request.tourist_place_id,)
-#         cursor.execute(sql, val)
-#         result = cursor.fetchone()
-#         if result is None:
-#             raise Exception("Tourist place with given id donot exist")
-#         sql = "SELECT 1 FROM Favorites WHERE user_id=(%s) and tourist_place_id=(%s)"
-#         val = (request.user_id, request.tourist_place_id)
-#         cursor.execute(sql, val)
-#         favorite_exists = cursor.fetchone()
-#         if favorite_exists:
-#             raise Exception("Favorite Already Exists")
-#         sql = "INSERT INTO Favorites(user_id,tourist_place_id) VALUES(%s, %s)"
-#         val = (request.user_id, request.tourist_place_id)
-#         cursor.execute(sql, val)
-#         db_conn.commit()
-#         last_inserted_id = cursor.lastrowid
-#         place = {
-#             "id": result[0],
-#             "name": result[1],
-#             "state_id": result[2],
-#             "image_url": result[3],
-#             "description": result[4],
-#             "review": result[5],
-#         }
-#         sql = "SELECT name FROM States WHERE id=(%s)"
-#         val = (place["state_id"],)
-#         cursor.execute(sql, val)
-#         state_name = cursor.fetchone()
-#         tourist_place = pb2.TouristPlace(
-#             id=place["id"],
-#             name=place["name"],
-#             state_name=state_name[0],
-#             image_url=place["image_url"],
-#             description=place["description"],
-#             review=place["review"],
-#         )
-#         return pb2.Favorite(id=last_inserted_id, tourist_place=tourist_place)
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
-
-
-# def get_favorites_of_user(request):
-#     try:
-#         cursor = db_conn.cursor()
-#         check_for_user(request.id)
-#         sql = "SELECT id,tourist_place_id FROM Favorites WHERE user_id=(%s)"
-#         val = (request.id,)
-#         cursor.execute(sql, val)
-#         result = cursor.fetchall()
-#         if len(result) == 0:
-#             raise Exception("User dont have any favorites")
-#         favorites_list = []
-#         for row in result:
-#             request = pb2.TouristPlaceId(id=row[1])
-#             tourist_place = get_tourist_place_by_id(request)
-#             favorite = {"id": row[0], "tourist_place": tourist_place}
-#             favorites_list.append(favorite)
-#         return pb2.Favorites(favorites=favorites_list)
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
-
-
-# def delete_from_favorites_of_user(request):
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT 1 FROM Favorites WHERE id=(%s)"
-#         val = request.id
-#         cursor.execute(sql, val)
-#         result = cursor.fetchone()
-#         if result is None:
-#             raise Exception("Favorite with given id donot exist")
-#         sql = "DELETE FROM Favorites WHERE id=(%s)"
-#         val = (request.id,)
-#         cursor.execute(sql, val)
-#         db_conn.commit()
-#         return pb2.EmptyResponse()
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
-
-
-# def check_for_state(state_id):
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT 1 FROM States where id=(%s)"
-#         cursor.execute(sql, (state_id,))
-#         result = cursor.fetchone()
-#         if result is None:
-#             raise Exception("state with given id donot exist")
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
+    except db_conn2.Error as e:
+        raise e
+    except Exception as e:
+        raise e
 
 
 # def create_itinerary(request):

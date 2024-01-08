@@ -44,7 +44,6 @@ def populate_states():
                     values = (state["name"],)
                     cursor.execute(query, values)
                     state_db = cursor.fetchone()
-                    print("state db is ", type(state_db))
                     if state_db is None:
                         # Insert only if there is no state in the DB
                         state_type = state["type"]
@@ -92,6 +91,27 @@ def populate_tourist_places():
         raise
 
 
-populate_state_types()
-populate_states()
-populate_tourist_places()
+def populate_expense_categories():
+    try:
+        with db_conn2.cursor() as cursor:
+            for key in pb2.ExpenseCategory.keys():
+                # TODO: Check if expense category exist in the db
+                query = "SELECT 1 FROM Expense_Categories where category=(%s)"
+                val = (key,)
+                cursor.execute(query, val)
+                expense_category_db = cursor.fetchone()
+                if expense_category_db is None:
+                    query = "INSERT INTO Expense_Categories(category) values(%s)"
+                    val = (key,)
+                    cursor.execute(query, val)
+                    db_conn2.commit()
+                else:
+                    print("Expense Category already exists in the database")
+    except Exception as e:
+        raise e
+
+
+# populate_state_types()
+# populate_states()
+# populate_tourist_places()
+# populate_expense_categories()
