@@ -20,12 +20,12 @@ service ItineraryServices {
 
   rpc DeleteUserFavoritePlace(FavoritePlace) returns (EmptyResponse) {}
 
-  rpc GetUserItineraries(User) returns (ItinerariesList) {}
-
   rpc CreateUserItinerary(CreateUserItineraryRequest)
       returns (CreateUserItineraryResponse) {}
 
   rpc DeleteUserItinerary(Itinerary) returns (EmptyResponse) {}
+
+  rpc GetUserItineraries(User) returns (ItinerariesList) {}
 
   rpc UpdateUserItinerary(Itinerary) returns (Itinerary) {}
 

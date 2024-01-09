@@ -191,13 +191,13 @@ if __name__ == "__main__":
     # for i in request.itinerary_places:
     #     print("hiiii", i.visit_date)
     # print("request is ", type(request.itinerary_places))
-    # response = client.create_user_itinerary(request)
-    # print("response is ", response)
+    response = client.create_user_itinerary(request)
+    print("response is ", response)
 
     # delete user itinerary
 
-    request = pb2.Itinerary(id=1)
-    client.delete_user_itinerary(request)
+    # request = pb2.Itinerary(id=1)
+    # client.delete_user_itinerary(request)
 
     # # print("request is ", request.itinerary_places[1]["tourist_place"])
     # response = client.create_user_itinerary(request)
