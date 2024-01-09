@@ -11,7 +11,6 @@ def populate_state_types():
     try:
         with db_conn2.cursor() as cursor:
             for key in pb2.StateType.keys():
-                # TODO: Check if state type exist in the db
                 query = "SELECT 1 FROM State_Types where type=(%s)"
                 val = (key,)
                 cursor.execute(query, val)
@@ -37,6 +36,12 @@ def populate_states():
     try:
         with open("db.json", "r") as fp:
             data = json.load(fp)
+            """
+            TODO: Get the states missing in DB in a single call using set operations A - B
+            query = "Select name from States"
+            cursor.execute(query)
+            state_names = [] # names you get from the output
+            """
             with db_conn2.cursor() as cursor:
                 for state in data["states"]:
                     # TODO: Check if a row exists for this state
