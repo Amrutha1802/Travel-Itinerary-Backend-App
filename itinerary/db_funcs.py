@@ -4,7 +4,12 @@ sys.path.append("..")
 
 from itinerary.db_config import db_conn2
 from gen import main_pb2
-from .time_funcs import get_date_string, get_time_from_timestamp
+from .time_funcs import (
+    get_timestamp_from_time,
+    get_date_string_from_timestamp,
+    get_time_str_from_timestamp,
+    get_pb_timestamp_from_date,
+)
 
 
 def create_user(request):
@@ -163,6 +168,8 @@ def get_tourist_places_by_filter(request):
     try:
         with db_conn2.cursor() as cursor:
             place_type_filter = request.place_type_filter
+
+            # if place_type_filter is FILTER_BY_TOURIST_PLACE_ID ,retreive the toruist place with given id
             if place_type_filter == main_pb2.FILTER_BY_TOURIST_PLACE_ID:
                 tourist_place_id = request.tourist_place_id
                 query = """SELECT Tourist_Places.id, Tourist_Places.name, Tourist_Places.image_url,
@@ -179,8 +186,10 @@ def get_tourist_places_by_filter(request):
                 if len(places_db) == 0:
                     raise Exception("Tourist Place with given id donot exist")
 
+            # if place_type_filter is FILTER_BY_STATE_ID ,retreive tourist places with given state_id
             elif place_type_filter == main_pb2.FILTER_BY_STATE_ID:
                 state_id = request.state_id
+
                 # check if state with given id exists in the database
                 state_query = "SELECT 1 from States where id=(%s)"
                 cursor.execute(state_query, (state_id,))
@@ -264,12 +273,13 @@ def add_user_favorite_place(request):
         with db_conn2.cursor() as cursor:
             user_id = request.user_id
             tourist_place_id = request.tourist_place_id
+
             # check if user with given id exists in the database
             check_for_user(user_id)
+
             # check if tourist place with given id exists in the database
             check_for_tourist_place(tourist_place_id)
 
-            # idempodency- insert into favorites if tourist place with given id is not present in the database
             query = (
                 "SELECT 1 FROM Favorites where user_id=(%s) and tourist_place_id=(%s)"
             )
@@ -277,12 +287,14 @@ def add_user_favorite_place(request):
             cursor.execute(query, values)
             favorite_place_db = cursor.fetchone()
 
+            # idempodency- insert into favorites if tourist place with given id is not present in the database
             if favorite_place_db is None:
                 query = "INSERT INTO Favorites(user_id,tourist_place_id) VALUES(%s,%s)"
                 values = (user_id, tourist_place_id)
                 cursor.execute(query, values)
                 last_inserted_id = cursor.lastrowid
                 db_conn2.commit()
+
                 query = (
                     "SELECT id,user_id,tourist_place_id FROM Favorites WHERE id = %s"
                 )
@@ -296,10 +308,11 @@ def add_user_favorite_place(request):
                     place_type_filter="FILTER_BY_TOURIST_PLACE_ID",
                 )
                 tourist_place_pb2 = get_tourist_places_by_filter(tourist_place_request)
+                tourist_place = tourist_place_pb2.tourist_places[0]
 
                 favorite_pb2 = main_pb2.FavoritePlace(
                     id=last_inserted_id,
-                    tourist_place=tourist_place_pb2.tourist_places[0],
+                    tourist_place=tourist_place,
                 )
 
                 return main_pb2.AddFavoritePlaceResponse(place=favorite_pb2)
@@ -421,19 +434,21 @@ def create_user_itinerary(request):
             notes = request.notes
             itinerary_places = request.itinerary_places
             expenses = request.expenses
+            # check if user with given id exists in the database
             check_for_user(user_id)
+            # check if state with given id exists in the database
             check_for_state(state_id)
 
-            query = "INSERT INTO Itineraries(state_id,user_id,start_date,end_date,notes,budget) VALUES(%s,%s,%s,%s,%s,%s)"
+            itinerary_query = "INSERT INTO Itineraries(state_id,user_id,start_date,end_date,notes,budget) VALUES(%s,%s,%s,%s,%s,%s)"
             values = (
                 state_id,
                 user_id,
-                get_date_string(start_date),
-                get_date_string(end_date),
+                get_date_string_from_timestamp(start_date),
+                get_date_string_from_timestamp(end_date),
                 notes,
                 budget,
             )
-            cursor.execute(query, values)
+            cursor.execute(itinerary_query, values)
             itinerary_id = cursor.lastrowid
             db_conn2.commit()
 
@@ -445,25 +460,32 @@ def create_user_itinerary(request):
                 state_id=itinerary_db["state_id"],
                 place_type_filter="FILTER_BY_STATE_ID",
             )
-            state_db = get_states_by_filter(state_request)
+            state_db = get_states_by_filter(state_request).states[0]
 
             itinerary_places_pb2 = []
             # add itinerary places
             # tourist_place
 
             for place in itinerary_places:
+                tourist_place_id = place.tourist_place.id
+                check_for_tourist_place(tourist_place_id)
+
+                start_time = place.start_time
+                end_time = place.end_time
+                visit_date = place.visit_date
                 # place validation
                 # date validation
-                query = "INSERT INTO Itinerary_Places(itinerary_id,tourist_place_id,start_time,end_time,visit_date) VALUES(%s,%s,%s,%s,%s)"
+                place_query = "INSERT INTO Itinerary_Places(itinerary_id,tourist_place_id,start_time,end_time,visit_date) VALUES(%s,%s,%s,%s,%s)"
                 values = (
                     itinerary_id,
-                    place.tourist_place.id,
-                    get_time_from_timestamp(place.start_time),
-                    get_time_from_timestamp(place.end_time),
-                    get_date_string(place.visit_date),
+                    tourist_place_id,
+                    get_time_str_from_timestamp(start_time),
+                    get_time_str_from_timestamp(end_time),
+                    get_date_string_from_timestamp(visit_date),
                 )
-                cursor.execute(query, values)
+                cursor.execute(place_query, values)
                 db_conn2.commit()
+
                 itinerary_place_id = cursor.lastrowid
                 place_query = "SELECT id,itinerary_id,tourist_place_id,start_time,end_time,visit_date from Itinerary_Places where id=(%s)"
                 cursor.execute(place_query, (itinerary_place_id,))
@@ -479,21 +501,27 @@ def create_user_itinerary(request):
                     id=itinerary_place_pb2["id"],
                     tourist_place=tourist_place_pb2.tourist_places[0],
                     itinerary_id=itinerary_place_pb2["itinerary_id"],
-                    # start_time=itinerary_place_pb2["start_time"],
-                    # end_time=itinerary_place_pb2["end_time"],
-                    visit_date=itinerary_place_pb2["visit_date"],
+                    start_time=get_timestamp_from_time(
+                        itinerary_place_pb2["start_time"]
+                    ),
+                    end_time=get_timestamp_from_time(itinerary_place_pb2["end_time"]),
+                    visit_date=get_pb_timestamp_from_date(
+                        itinerary_place_pb2["visit_date"]
+                    ),
                 )
                 itinerary_places_pb2.append(itinerary_place)
 
             expenses_pb2 = []
             # add expenses to itinerary
             for expense in expenses:
-                expense_category = expense.expense_category
+                expense_category = main_pb2.ExpenseCategory.Name(
+                    expense.expense_category
+                )
                 expense_description = expense.description
                 expense_amount = expense.amount
 
                 expense_category_id_query = (
-                    "SELECT id from ExpenseCategories where category=(%s)"
+                    "SELECT id from Expense_Categories where category=(%s)"
                 )
                 cursor.execute(expense_category_id_query, (expense_category,))
                 expense_category_db = cursor.fetchone()
@@ -509,41 +537,47 @@ def create_user_itinerary(request):
                 cursor.execute(expense_query, values)
                 db_conn2.commit()
                 expense_id = cursor.lastrowid
-                place_query = "SELECT id,category_id,itinerary_id,amount where id=(%s)"
+                place_query = """SELECT Expenses.id,Expense_Categories.category,Expenses.itinerary_id,Expenses.amount,Expenses.description from Expenses
+                                INNER JOIN Expense_Categories ON
+                                Expenses.category_id=Expense_Categories.id
+                                where Expenses.id=(%s)"""
                 cursor.execute(place_query, (expense_id,))
                 expense_db = cursor.fetchone()
 
                 expense = main_pb2.Expense(
                     id=expense_db["id"],
-                    category_id=expense_db["category_id"],
+                    expense_category=expense_db["category"],
                     itinerary_id=expense_db["itinerary_id"],
+                    amount=expense_db["amount"],
                     description=expense_db["description"],
                 )
                 expenses_pb2.append(expense)
 
             # calculate remaining budget
-            expenses_query = "SELECT sum(amount) FROM Expenses WHERE itinerary_id=(%s)"
+            expenses_query = "SELECT COALESCE(sum(amount),0) as sum_expenses FROM Expenses WHERE itinerary_id=(%s)"
             cursor.execute(expenses_query, (itinerary_id,))
-            total_expenses = cursor.fetchone()
+            result = cursor.fetchone()
+            total_expenses = result["sum_expenses"]
+
             budget_query = "SELECT budget FROM Itineraries WHERE id=(%s)"
             cursor.execute(budget_query, (itinerary_id,))
-            total_budget = cursor.fetchone()
-            if total_expenses[0] is None:
-                remaining_budget = total_budget[0]
-            remaining_budget = total_budget[0] - total_expenses[0]
+            result = cursor.fetchone()
+            total_budget = result["budget"]
+
+            remaining_budget = total_budget - total_expenses
 
             itinerary_pb2 = main_pb2.Itinerary(
-                id=itinerary_db["id"],
+                id=itinerary_id,
                 state=state_db,
-                start_date=itinerary_db["start_date"],
-                end_date=itinerary_db["end_date"],
+                start_date=get_pb_timestamp_from_date(itinerary_db["start_date"]),
+                end_date=get_pb_timestamp_from_date(itinerary_db["end_date"]),
                 budget=itinerary_db["budget"],
                 notes=itinerary_db["notes"],
                 places=itinerary_places_pb2,
                 expenses=expenses_pb2,
-                remaining_budget=remaining_budget,
+                remainingbudget=remaining_budget,
             )
-            return itinerary_pb2
+            return main_pb2.CreateUserItineraryResponse(itinerary=itinerary_pb2)
 
     except db_conn2.Error as e:
         raise e
@@ -569,6 +603,7 @@ def delete_user_itinerary(request):
     try:
         with db_conn2.cursor() as cursor:
             itinerary_id = request.id
+            # check if itinerary exists
             check_for_itinerary(itinerary_id)
             # remove itinerary_places of given itinerary
             sql = "DELETE FROM ItineraryPlaces WHERE itinerary_id=(%s)"
@@ -602,9 +637,6 @@ def update_user_itinerary(request):
             check_for_itinerary(itinerary_id)
             budget = request.budget
             notes = request.notes
-
-            # print("hiiiii")
-            # print("it", itinerary_places)
 
             query = "INSERT INTO Itineraries(state_id,user_id,start_date,end_date,notes,budget) VALUES(%s,%s,%s,%s,%s,%s)"
             values = (
@@ -710,7 +742,7 @@ def update_user_itinerary(request):
                 end_date=itinerary_db["end_date"],
                 budget=itinerary_db["budget"],
                 notes=itinerary_db["notes"],
-                places=itinerary_places_pb2,
+                # places=itinerary_places_pb2,
                 expenses=expenses_pb2,
             )
             return itinerary_pb2
@@ -719,61 +751,6 @@ def update_user_itinerary(request):
         raise e
     except Exception as e:
         raise e
-
-
-# def create_itinerary(request):
-#     try:
-#         cursor = db_conn.cursor()
-#         check_for_user(request.user_id)
-#         check_for_state(request.state_id)
-#         sql = "INSERT INTO Itineraries(state_id,user_id,start_date,end_date,notes,budget) VALUES(%s, %s,%s,%s,%s,%s)"
-#         val = (
-#             request.state_id,
-#             request.user_id,
-#             create_mysql_date_from_timestamp(request.start_date),
-#             create_mysql_date_from_timestamp(request.end_date),
-#             request.notes,
-#             request.budget,
-#         )
-#         cursor.execute(sql, val)
-#         db_conn.commit()
-#         itinerary_id = cursor.lastrowid
-#         sql = (
-#             "SELECT id,start_date,end_date,budget,notes FROM Itineraries WHERE id=(%s)"
-#         )
-#         val = (itinerary_id,)
-#         cursor.execute(sql, val)
-#         itinerary = cursor.fetchone()
-#         state_request = pb2.StateId(id=request.state_id)
-#         state = get_state_by_id(state_request)
-#         start_timestamp = create_timestamp_from_mysql_date(itinerary[1])
-#         end_timestamp = create_timestamp_from_mysql_date(itinerary[1])
-#         return pb2.Itinerary(
-#             id=itinerary[0],
-#             state=state,
-#             start_date=start_timestamp,
-#             end_date=end_timestamp,
-#             budget=itinerary[3],
-#             notes=itinerary[4],
-#         )
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
-
-
-# def check_for_itinerary(id):
-#     try:
-#         cursor = db_conn.cursor()
-#         sql = "SELECT 1 FROM Itineraries where id=(%s)"
-#         cursor.execute(sql, (id,))
-#         result = cursor.fetchone()
-#         if result is None:
-#             raise Exception("Itinerary with given id donot exist")
-#     except db_conn.Error as e:
-#         raise e
-#     except Exception as e:
-#         raise e
 
 
 # def get_itineraries_of_user(request):

@@ -63,9 +63,9 @@ CREATE TABLE Itinerary_Places(
    id int NOT NULL AUTO_INCREMENT,
    itinerary_id int,
    tourist_place_id int,
+   visit_date date,
    start_time time,
    end_time time,
-   visit_date date,
    PRIMARY KEY (id),
    FOREIGN KEY(itinerary_id) REFERENCES Itineraries(id),
    FOREIGN KEY(tourist_place_id) REFERENCES Tourist_Places(id)

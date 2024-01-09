@@ -2,20 +2,21 @@
 
 This is a Travel Itinerary Application implemented using gRPC, Protocol Buffers, and MySQL in Python.
 The application allows users
+
 - to view tourist place in different states
 - add tourist places to their favorites
 - view their favorites
 - user can create itinerary for a trip to a state
 - view the itineraries created by the user,
 - in the itinerary
-    - user can add notes
-    - add places to visit
-    - visit timings on a particular date
-    - add budget
-    - add expenses to an itinerary
-    - user can update the notes
-    - update the budget
-    - remove places in the itinerary
+  - user can add notes
+  - add places to visit
+  - visit timings on a particular date
+  - add budget
+  - add expenses to an itinerary
+  - user can update the notes
+  - update the budget
+  - remove places in the itinerary
 
 ## Prerequisites
 
@@ -50,147 +51,77 @@ You can use the provided gRPC client to interact with the server. Refer to the `
 
 Create a new User.
 
-`rpc CreateUser(CreateUserRequest) returns (User) {}`
-
-##### GetUserStatuses
-
-List all User statuses.
-
-`rpc GetUserStatuses(EmptyRequest) returns (Statuses) {}`
+`rpc CreateUser(User) returns (User) {}`
 
 #### GetAllStates
 
 Lists all existing states information.
 
-`rpc GetAllStates(EmptyRequest) returns (States) {}`
+`rpc GetAllStates(EmptyRequest) returns (StatesList) {}`
 
-#### GetStatesByType
+#### GetStateByFilter
 
-Lists all States based on given type.
+List states based on the given filter type(id or state_type)
 
-`rpc GetStatesByType(StateTypeId) returns (States) {}`
+`rpc GetStateByFilter(StateFilterRequest) returns (StatesFilterResponse) {}`
 
-#### GetStateById
+#### GetTouristPlacesByFilter
 
-Get Information about a state with given id
+List Tourist Places based on the given filter type(id or state_id)
 
-`rpc GetStateById(StateId) returns (State) {}`
+`rpc GetTouristPlacesByFilter(TouristPlacesFilterRequest)returns (TouristPlacesFilterResponse) {}`
 
-#### GetTouristPlacesInState
+#### GetUserFavoritePlaces
 
-Get Information about a tourist places in a state with given id
+Lists Tourist Places added to Favorites of a user
 
-`rpc GetTouristPlacesInState(StateId) returns (TouristPlaces) {}`
+`rpc GetUserFavoritePlaces(User) returns (FavoritePlacesList) {}`
 
-#### GetTouristPlaceById
+#### AddUserFavoritePlace
 
-Get Information about a tourist place with given id
+Add a tourist place to user Favorites
 
-`rpc GetTouristPlaceById(TouristPlaceId) returns (TouristPlace) {}`
+`rpc AddUserFavoritePlace(AddFavoritePlaceRequest) returns (AddFavoritePlaceResponse) {}`
 
-#### GetFavoritesOfUser
+#### DeleteUserFavoritePlace
 
-Get list of places that are added to favorites of given user with given id
+Delete a tourist place from User Favorites
 
-`rpc GetFavoritesOfUser(UserId) returns (Favorites) {}`
+`rpc DeleteUserFavoritePlace(FavoritePlace) returns (EmptyResponse) {}`
 
-#### AddToFavoritesOfUser
+#### GetUserItineraries
 
-Add a place to user favorites
+`rpc GetUserItineraries(User) returns (ItinerariesList) {}`
 
-`rpc AddToFavoritesOfUser(AddFavoriteRequest) returns (Favorite) {}`
+#### CreateUserItinerary
 
-#### DeleteFromFavoritesOfUser
+`rpc CreateUserItinerary(CreateUserItineraryRequest returns (CreateUserItineraryResponse) {}`
 
-Remove a place from user favorites
+#### DeleteUserItinerary
 
-`rpc DeleteFromFavoritesOfUser(FavoriteId) returns (Favorite) {}`
+`rpc DeleteUserItinerary(Itinerary) returns (EmptyResponse) {}`
 
-#### GetItinerariesOfUser
+#### UpdateUserItinerary
 
-Get Information about itineraries created by a given user
-
-`rpc GetItinerariesOfUser(UserId) returns (Itineraries) {}`
-
-#### CreateItinerary
-
-Create a new itinerary
-
-`rpc CreateItinerary(AddItineraryRequest) returns (Itinerary) {}`
-
-#### DeleteItinerary
-
-Delete an itinerary with given id
-
-`rpc DeleteItinerary(ItineraryId) returns (Itinerary) {}`
-
-#### UpdateItinerary
-
-Update Information of itinerary with given id
-
-`rpc UpdateItinerary(UpdateItineraryRequest) returns (Itinerary) {}`
-
-#### GetItinerary
-
-Get Information about a itinerary with given id
-
-`rpc GetItinerary(ItineraryId) returns (Itinerary) {}`
-
-#### AddPlaceToItinerary
-
-Add a place of visit to an itinerary
-
-`rpc AddPlaceToItinerary(AddItineraryPlaceRequest) returns (ItineraryPlace) {}`
-
-#### UpdatePlaceInItinerary
-
-Update visit timings of a place in itinerary
-
-`rpc UpdatePlaceInItinerary(UpdateItineraryPlaceRequest) returns (ItineraryPlace) {}`
-
-#### GetItineraryPlacesByDateAndId
-
-Get Information about a place and visit timings in an itinerary
-
-`rpc GetItineraryPlacesByDateAndId(GetItineraryPlacesRequest returns (ItineraryPlaces) {}`
-
-#### DeletePlaceInItinerary
-
-Remove a place of visit from an itinerary
-
-`rpc DeletePlaceInItinerary(ItineraryPlaceId) returns (EmptyResponse) {}`
-
-#### GetExpensesOfItinerary
-
-Get Information about expenses added to an itinerary with given id
-
-`rpc GetExpensesOfItinerary(ItineraryId) returns (Expenses) {}`
-
-#### AddExpenseToItinerary
-
-Add a new expense to an itineray
-
-`rpc AddExpenseToItinerary(AddExpenseRequest) returns (Expense) {}`
-
-#### GetRemainingBudget
-
-Get remaining budget of an itinerary with given id i.e total budget - total expenses
-
-`rpc GetRemainingBudget(ItineraryId) returns (RemainingBudget) {}`
-
-#### GetExpenseCategories
-
-Get Information about all expense categories
-
-`rpc GetExpenseCategories(EmptyRequest) returns (ExpenseCategories) {}`
+`rpc UpdateUserItinerary(Itinerary) returns (Itinerary) {}`
 
 ### Project Structure
 
 - server.py: Implementation of the gRPC server.
 - client.py: Example client to interact with the gRPC server.
-- Protos/main.proto: Protocol Buffers definition file.
-- config.py: MySQL database setup.
+- protos/main.proto: Protocol Buffers definition file.
+
+gen/
+
 - main_pb2.py and main_pb2_grpc.py: Generated files from the Protocol Buffers definition.
+
+itinerary/
+
+- db_config.py: MySQL database setup.
+- db_funcs.py: helper functions for performing queries in database
+- time_funcs: helper functions for converting datetime objects to timestamps and vice versa
+
 - sql-docs/db.sql: ddl queries for creating required tables in the MySQL database
-- itinerarylib.py: helper functions for implementing the methods of the server
-- timestamplib.py : helper functions for converting time stamp objects to mysql objects and vice versa
+
+-scripts/db_seed.py: contains functions for populating data into tables in database
+-db.json: json file with data of states and union territories

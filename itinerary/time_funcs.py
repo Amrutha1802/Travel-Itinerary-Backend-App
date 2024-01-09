@@ -1,47 +1,47 @@
 from datetime import datetime
-
 from google.protobuf.timestamp_pb2 import Timestamp
 
 
 DATE_FMT = ""
 TIME_FMT = "%H:%M:%S"
 
+from google.protobuf.timestamp_pb2 import Timestamp
+from datetime import timedelta, datetime, date
 
-def get_pb_timestamp(date_obj):
+
+def get_date_string_from_timestamp(pb_timestamp):
     """
-    date_str: date string with format 2022-12-15
-    returns: protobuf timestamp object
+    Converts a timestamp object to datetime.date object
     """
-    pass
+    return str(pb_timestamp.ToDatetime().date())
 
 
-def get_date_string(pb_timestamp):
-    """ """
-    return pb_timestamp.ToDatetime().date()
-
-
-def get_time_from_timestamp(timestamp_object):
+def get_time_str_from_timestamp(timestamp_object):
+    """
+    Converts timestamp object to datetime.timedelta object
+    """
     datetime_obj = timestamp_object.ToDatetime()
-    mysql_time_str = datetime_obj.strftime("%H:%M:%S")
-    return mysql_time_str
+    time_str = datetime_obj.strftime("%H:%M:%S")
+    return time_str
 
 
-def create_timestamp_from_mysql_date(mysql_date):
-    datetime_obj = datetime.combine(mysql_date, datetime.min.time())
-    date_timestamp = Timestamp()
-    date_timestamp.FromDatetime(datetime_obj)
-    return date_timestamp
-
-
-def create_time_stamp_from_datetime(date):
-    timestamp_obj = Timestamp()
-    timestamp_obj.FromDatetime(date)
-    return timestamp_obj
-
-
-def create_timestamp_from_mysql_time(timedelta_obj):
+def get_timestamp_from_time(timedelta_obj):
+    """
+    Converts a timedelta_obj to protobuf Timestamp
+    """
     epoch = datetime.utcfromtimestamp(0)
     target_datetime = epoch + timedelta_obj
     timestamp_obj = Timestamp()
     timestamp_obj.FromDatetime(target_datetime)
     return timestamp_obj
+
+
+def get_pb_timestamp_from_date(date_object):
+    """
+    Converts a datetime.date object to a protobuf Timestamp object.
+    """
+    dt_object = datetime.combine(date_object, datetime.min.time())
+    timestamp = Timestamp()
+    timestamp.FromDatetime(dt_object)
+
+    return timestamp

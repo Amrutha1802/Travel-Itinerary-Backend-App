@@ -171,10 +171,11 @@ message AddItineraryPlaceResponse { ItineraryPlace itinerary_place = 1; }
 message ItineraryPlaceId { int32 id = 1; }
 
 message Expense {
-  int32 itinerary_id = 1;
-  ExpenseCategory expense_category = 2;
-  string description = 3;
-  double amount = 4;
+  int32 id = 1;
+  int32 itinerary_id = 2;
+  ExpenseCategory expense_category = 3;
+  string description = 4;
+  double amount = 5;
 }
 
 enum ExpenseCategory {

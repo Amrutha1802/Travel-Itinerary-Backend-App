@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from . import main_pb2 as main__pb2
+import gen.main_pb2 as main__pb2
 
 
 class ItineraryServicesStub(object):
