@@ -25,6 +25,7 @@ def create_user(request):
             email = request.email
             status = main_pb2.Status.Name(main_pb2.Status.ACTIVE)
 
+
             # TODO: validations - later
             # name
             # validation-1: shouldn't be empty
@@ -33,17 +34,40 @@ def create_user(request):
             # validation-1: email should be a valid email address format
 
             # TODO: validation-2: check if a user exists with the same email
+            def is_user_exist(email):
+                """
+                return bool
+                """
+                pass
             query = "SELECT 1 FROM Users WHERE email=(%s)"
             cursor.execute(query, (email,))
             result = cursor.fetchone()
             if result is not None:
+                # Do not use exception
                 raise Exception("User with given email id already exists ")
+
+            # if is_user_exists(email):
+                # raise Exception("User with given email id already exists ")
 
             query = "INSERT INTO Users(name,email,status) VALUES(%s,%s,%s)"
             values = (name, email, status)
             cursor.execute(query, values)
             db_conn2.commit()
             last_inserted_id = cursor.lastrowid
+
+            """
+            querying a user with id and creating a User proto msg
+            """
+            def get_user_pb(user_db):
+                """
+                return user pb
+            if the user doesn't exist:
+                1. raise exception
+                2. Send empty user object
+                """
+                pass
+            def get_users_pb(users_db):
+                pass
 
             query = "SELECT name, email, status FROM Users WHERE id = %s"
             values = (last_inserted_id,)
@@ -78,6 +102,11 @@ def get_all_states():
                 """
             cursor.execute(state_query)
             states_db = cursor.fetchall()
+            states_db = exec_query(query, None, many=True)
+            def get_states_pb(states_db):
+                """
+                return states pb
+                """
             states_list = [
                 {
                     "id": state["id"],
@@ -113,12 +142,21 @@ def get_states_by_filter(request):
             if place_type_filter == main_pb2.FILTER_BY_STATE_ID:
                 state_id = request.state_id
                 state_query = """SELECT States.id,States.name,States.image_url,States.description,State_Types.type
-                                FROM States 
-                                INNER JOIN State_Types ON States.state_type_id = State_Types.id 
+                                FROM States
+                                INNER JOIN State_Types ON States.state_type_id = State_Types.id
                                 WHERE States.id = (%s)"""
                 values = (state_id,)
                 cursor.execute(state_query, values)
                 states_db = cursor.fetchall()
+                states_db = exec_query(query, values, many=True)
+                # TODO: refactor
+                def exec_query(query, values, many):
+                    """
+                    many = False -> fetchone
+                    many = True -> fetchall
+
+                    return either a single element or an array of elements
+                    """
 
                 if len(states_db) == 0:
                     raise Exception(
@@ -132,8 +170,8 @@ def get_states_by_filter(request):
                     raise Exception("Provided undefined_state_type")
 
                 state_query = """SELECT States.id, States.name, States.image_url, States.description, State_Types.type
-                                FROM States 
-                                INNER JOIN State_Types ON States.state_type_id = State_Types.id 
+                                FROM States
+                                INNER JOIN State_Types ON States.state_type_id = State_Types.id
                                 WHERE State_Types.type = (%s)"""
                 values = (state_type,)
                 cursor.execute(state_query, values)
