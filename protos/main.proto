@@ -131,7 +131,7 @@ message Itinerary {
   string notes = 6;
   repeated ItineraryPlace places = 7;
   repeated Expense expenses = 8;
-  double remainingbudget = 9;
+  double remaining_budget = 9;
 }
 
 message CreateUserItineraryRequest {

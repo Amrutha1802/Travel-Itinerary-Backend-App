@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import gen.main_pb2 as main__pb2
+from . import main_pb2 as main__pb2
 
 
 class ItineraryServicesStub(object):
@@ -49,11 +49,6 @@ class ItineraryServicesStub(object):
             request_serializer=main__pb2.FavoritePlace.SerializeToString,
             response_deserializer=main__pb2.EmptyResponse.FromString,
         )
-        self.GetUserItineraries = channel.unary_unary(
-            "/ItineraryServices/GetUserItineraries",
-            request_serializer=main__pb2.User.SerializeToString,
-            response_deserializer=main__pb2.ItinerariesList.FromString,
-        )
         self.CreateUserItinerary = channel.unary_unary(
             "/ItineraryServices/CreateUserItinerary",
             request_serializer=main__pb2.CreateUserItineraryRequest.SerializeToString,
@@ -63,6 +58,11 @@ class ItineraryServicesStub(object):
             "/ItineraryServices/DeleteUserItinerary",
             request_serializer=main__pb2.Itinerary.SerializeToString,
             response_deserializer=main__pb2.EmptyResponse.FromString,
+        )
+        self.GetUserItineraries = channel.unary_unary(
+            "/ItineraryServices/GetUserItineraries",
+            request_serializer=main__pb2.User.SerializeToString,
+            response_deserializer=main__pb2.ItinerariesList.FromString,
         )
         self.UpdateUserItinerary = channel.unary_unary(
             "/ItineraryServices/UpdateUserItinerary",
@@ -136,12 +136,6 @@ class ItineraryServicesServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
-    def GetUserItineraries(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
-
     def CreateUserItinerary(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -149,6 +143,12 @@ class ItineraryServicesServicer(object):
         raise NotImplementedError("Method not implemented!")
 
     def DeleteUserItinerary(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def GetUserItineraries(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
@@ -222,11 +222,6 @@ def add_ItineraryServicesServicer_to_server(servicer, server):
             request_deserializer=main__pb2.FavoritePlace.FromString,
             response_serializer=main__pb2.EmptyResponse.SerializeToString,
         ),
-        "GetUserItineraries": grpc.unary_unary_rpc_method_handler(
-            servicer.GetUserItineraries,
-            request_deserializer=main__pb2.User.FromString,
-            response_serializer=main__pb2.ItinerariesList.SerializeToString,
-        ),
         "CreateUserItinerary": grpc.unary_unary_rpc_method_handler(
             servicer.CreateUserItinerary,
             request_deserializer=main__pb2.CreateUserItineraryRequest.FromString,
@@ -236,6 +231,11 @@ def add_ItineraryServicesServicer_to_server(servicer, server):
             servicer.DeleteUserItinerary,
             request_deserializer=main__pb2.Itinerary.FromString,
             response_serializer=main__pb2.EmptyResponse.SerializeToString,
+        ),
+        "GetUserItineraries": grpc.unary_unary_rpc_method_handler(
+            servicer.GetUserItineraries,
+            request_deserializer=main__pb2.User.FromString,
+            response_serializer=main__pb2.ItinerariesList.SerializeToString,
         ),
         "UpdateUserItinerary": grpc.unary_unary_rpc_method_handler(
             servicer.UpdateUserItinerary,
@@ -477,35 +477,6 @@ class ItineraryServices(object):
         )
 
     @staticmethod
-    def GetUserItineraries(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            "/ItineraryServices/GetUserItineraries",
-            main__pb2.User.SerializeToString,
-            main__pb2.ItinerariesList.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
-
-    @staticmethod
     def CreateUserItinerary(
         request,
         target,
@@ -553,6 +524,35 @@ class ItineraryServices(object):
             "/ItineraryServices/DeleteUserItinerary",
             main__pb2.Itinerary.SerializeToString,
             main__pb2.EmptyResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def GetUserItineraries(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/ItineraryServices/GetUserItineraries",
+            main__pb2.User.SerializeToString,
+            main__pb2.ItinerariesList.FromString,
             options,
             channel_credentials,
             insecure,

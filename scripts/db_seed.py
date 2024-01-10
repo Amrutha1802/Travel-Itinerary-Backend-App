@@ -5,118 +5,81 @@ sys.path.append("..")
 
 from itinerary.db_config import db_conn2
 from gen import main_pb2 as pb2
-
-
-def populate_state_types():
-    try:
-        with db_conn2.cursor() as cursor:
-            for key in pb2.StateType.keys():
-                query = "SELECT 1 FROM State_Types where type=(%s)"
-                val = (key,)
-                cursor.execute(query, val)
-                state_type_db = cursor.fetchone()
-                if state_type_db is None:
-                    query = "INSERT INTO State_Types(type) values(%s)"
-                    val = (key,)
-                    cursor.execute(query, val)
-                    db_conn2.commit()
-                else:
-                    print("StateType already exists in the database")
-    except Exception as e:
-        raise e
+from itinerary.helper_funcs import exec_query
 
 
 def populate_states():
-    # TODO: Get auto increment ids for state and union territories
-    STATE_TYPE_ID = 2
-    UT_TYPE_ID = 3
-    state_types = {
-        "state": STATE_TYPE_ID,
-    }
     try:
         with open("db.json", "r") as fp:
-            data = json.load(fp)
             """
             TODO: Get the states missing in DB in a single call using set operations A - B
             query = "Select name from States"
             cursor.execute(query)
             state_names = [] # names you get from the output
             """
-            with db_conn2.cursor() as cursor:
-                for state in data["states"]:
-                    # TODO: Check if a row exists for this state
-                    query = "SELECT 1 FROM States where name=(%s)"
-                    values = (state["name"],)
-                    cursor.execute(query, values)
-                    state_db = cursor.fetchone()
-                    if state_db is None:
-                        # Insert only if there is no state in the DB
-                        state_type = state["type"]
-                        state_type_id = state_types.get(state_type, UT_TYPE_ID)
-                        query = "INSERT INTO States(name,image_url,description,state_type_id) values(%s,%s,%s,%s)"
-                        val = (
-                            state["name"],
-                            state["url"],
-                            state["description"],
-                            state_type_id,
-                        )
-                        cursor.execute(query, val)
-                        db_conn2.commit()
-                    else:
-                        print("State already exists in the database")
+            data = json.load(fp)
+            states_data = {state["name"]: state for state in data["states"]}
+            states_json_set = {state["name"] for state in data["states"]}
+        query = "SELECT name from States"
+        states_db = exec_query(query, values=None, many=True)
+        states_db_set = {state["name"] for state in states_db}
+        states_not_in_db = states_json_set - states_db_set
+        for state in states_not_in_db:
+            query = "INSERT INTO States(name,image_url,description,type) values(%s,%s,%s,%s)"
+            state_dict = states_data.get(state)
+            # state_dict = next((s for s in data["states"] if s["name"] == state), None)
+            if state_dict:
+                values = (
+                    state_dict["name"],
+                    state_dict["url"],
+                    state_dict["description"],
+                    state_dict["type"],
+                )
+                exec_query(query, values, many=False)
+
     except:
         raise
+
+
+populate_states()
 
 
 def populate_tourist_places():
     try:
         with open("db.json", "r") as fp:
             data = json.load(fp)
-            with db_conn2.cursor() as cursor:
-                for place in data["tourist-places"]:
-                    query = "SELECT 1 FROM Tourist_Places where name=(%s)"
-                    values = (place["name"],)
-                    cursor.execute(query, values)
-                    place_db = cursor.fetchone()
-                    if place_db is None:
-                        # Insert only if there is no tourist_place in the DB
-                        query = "INSERT INTO Tourist_Places(name,state_id,image_url,description,review) values(%s,%s,%s,%s,%s)"
-                        val = (
-                            place["name"],
-                            place["stateid"],
-                            place["images"][0]["url"],
-                            place["description"],
-                            place["review"],
-                        )
-                        cursor.execute(query, val)
-                        db_conn2.commit()
-                    else:
-                        print("Tourist-Place already exists in the database")
+            places_data = {place["name"]: place for place in data["tourist-places"]}
+            places_json_set = {place["name"] for place in data["tourist-places"]}
+        query = "SELECT name from Tourist_Places"
+        places_db = exec_query(query, values=None, many=True)
+        places_db_set = {place["name"] for place in places_db}
+        places_not_in_db = places_json_set - places_db_set
+        for place in places_not_in_db:
+            query = "INSERT INTO Tourist_Places(name,state_id,image_url,description,review) values(%s,%s,%s,%s,%s)"
+            place_dict = places_data[place]
+            if place_dict:
+                values = (
+                    place_dict["name"],
+                    get_state_id(place_dict["statename"]),
+                    place_dict["images"][0]["url"],
+                    place_dict["description"],
+                    place_dict["review"],
+                )
+                exec_query(query, values, many=False)
+
     except:
         raise
 
 
-def populate_expense_categories():
-    try:
-        with db_conn2.cursor() as cursor:
-            for key in pb2.ExpenseCategory.keys():
-                # TODO: Check if expense category exist in the db
-                query = "SELECT 1 FROM Expense_Categories where category=(%s)"
-                val = (key,)
-                cursor.execute(query, val)
-                expense_category_db = cursor.fetchone()
-                if expense_category_db is None:
-                    query = "INSERT INTO Expense_Categories(category) values(%s)"
-                    val = (key,)
-                    cursor.execute(query, val)
-                    db_conn2.commit()
-                else:
-                    print("Expense Category already exists in the database")
-    except Exception as e:
-        raise e
+def get_state_id(state_name):
+    with db_conn2.cursor() as cursor:
+        query = "SELECT id from States where name=(%s)"
+        values = state_name
+        result = exec_query(query, values, False)
+        return result["id"]
 
 
 # populate_state_types()
 # populate_states()
-# populate_tourist_places()
+populate_tourist_places()
 # populate_expense_categories()

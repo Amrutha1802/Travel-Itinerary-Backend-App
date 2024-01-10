@@ -90,8 +90,8 @@ if __name__ == "__main__":
     client = ItineraryClient()
     # create user
     # request = pb2.User(
-    #     name="User6",
-    #     email="user6@gmail.com",
+    #     name="User456",
+    #     email="user456@gmail.com",
     # )
     # response = client.create_user(request)
     # print(response)
@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     # get_states_by_filter (id)
     # request = pb2.StateFilterRequest(
-    #     state_id=4, place_type_filter="FILTER_BY_STATE_ID", type="STATE"
+    #     state_id=456, place_type_filter="FILTER_BY_STATE_ID", type="STATE"
     # )
     # response = client.get_states_by_filter(request)
     # for i in response.states:
@@ -124,25 +124,25 @@ if __name__ == "__main__":
 
     # get tourist places by filter
     # request = pb2.TouristPlacesFilterRequest(
-    #     tourist_place_id=887, place_type_filter=3, state_id=1
+    #     tourist_place_id=889, place_type_filter=3, state_id=1
     # )
     # response = client.get_tourist_places_by_filter(request)
     # for i in response.tourist_places:
     #     print(i)
 
     # add to favorites of user
-    # request = pb2.AddFavoritePlaceRequest(user_id=4, tourist_place_id=101)
+    # request = pb2.AddFavoritePlaceRequest(user_id=4, tourist_place_id=112)
     # response = client.add_user_favorite_place(request)
     # print("response is", response.place)
 
     # get user favorites
-    # request = pb2.User(id=4)
-    # response = client.get_user_favorite_places(request)
-    # for i in response.favorites:
-    #     print(i)
+    request = pb2.User(id=4)
+    response = client.get_user_favorite_places(request)
+    for i in response.favorites:
+        print(i)
 
     # delete from favorites
-    # request = pb2.FavoritePlace(id=12)
+    # request = pb2.FavoritePlace(id=2)
     # response = client.delete_user_favorite(request)
     # print("res is ", response)
 

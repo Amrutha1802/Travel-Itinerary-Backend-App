@@ -25,7 +25,7 @@ def get_time_str_from_timestamp(timestamp_object):
     return time_str
 
 
-def get_timestamp_from_time(timedelta_obj):
+def get_pb_timestamp_from_time(timedelta_obj):
     """
     Converts a timedelta_obj to protobuf Timestamp
     """

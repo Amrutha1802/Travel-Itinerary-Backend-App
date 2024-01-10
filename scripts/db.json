@@ -3,14 +3,14 @@
     {
       "id": 1,
       "name": "Andhra Pradesh",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.holidify.com/images/bgImages/ARAKU-VALLEY.jpg",
       "description": "Andhra Pradesh presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make Andhra Pradesh a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 2,
       "name": "Arunachal Pradesh",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/arunachal-pradesh/arunachal-pradeshand.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Arunachal Pradesh presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
@@ -24,7 +24,7 @@
     {
       "id": 4,
       "name": "Bihar",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/bodh-gaya/bodh-gaya-the-great-budhha-statue-0.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
       "description": "Bihar presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
@@ -38,175 +38,175 @@
     {
       "id": 6,
       "name": "Goa",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/goa/goa-vagator-beach-3.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
       "description": "Goa presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 7,
       "name": "Gujarat",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/dwarka/dwarka-dwarkadish-temple-1.jpg/jcr:content/renditions/cq5dam.web.256.256.jpeg",
       "description": "Gujarat presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 8,
       "name": "Haryana",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/haryana/haryanaand.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Haryana presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 9,
       "name": "Himachal Pradesh",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/simla/simla-simla-61.jpg/jcr:content/renditions/cq5dam.web.1800.600.jpeg",
       "description": "Himachal Pradesh presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 10,
       "name": "Jammu and Kashmir",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/srinagar/srinagar-chashme-shahi-1.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
       "description": "Jammu and Kashmir presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 11,
       "name": "Jharkhand",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/jharkhand/jharkhandand.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Jharkhand presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 12,
       "name": "Karnataka",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/karnataka/karnataka.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Karnataka presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 13,
       "name": "Kerala",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/kerala/keralaand.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Kerala presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 14,
       "name": "Madhya Pradesh",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/gwalior/gwalior-gwalior-fort-1.jpg/jcr:content/renditions/cq5dam.web.256.256.jpeg",
       "description": "Madhya Pradesh presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 15,
       "name": "Maharashtra",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/mahabaleshwar/mahabaleshwar-elephants-head-point-70.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
       "description": "Maharashtra presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 16,
       "name": "Manipur",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/manipur/langol-peak-tower-manipur.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Manipur presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 17,
       "name": "Meghalaya",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/meghalaya/cherrapunji-meghalaya.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Meghalay presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 18,
       "name": "Mizoram",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/champhai/champhai-rih-dil-0.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
       "description": "Mizoram presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 19,
       "name": "Nagaland",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/kohima/kohima-dzukou-valley-1.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
       "description": "Nagaland presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 20,
       "name": "Odisha",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/bhubaneswar/bhubaneswar-lingaraj-temple-10.jpg/jcr:content/renditions/cq5dam.web.256.256.jpeg",
       "description": "Odisha presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 21,
       "name": "Punjab",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/amritsar/amritsar-golden-temple-0.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
       "description": "Punjab presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 22,
       "name": "Rajasthan",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/jaipur/jaipur-hawa-mahal-0.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
       "description": "Rajasthan presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 23,
       "name": "Sikkim",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/sikkim/monastery-gangtok-sikkim.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Sikkim presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 24,
       "name": "Tamil Nadu",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/places/tirupati/tirupati-lepakshi-10.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Tamil Nadu presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 25,
       "name": "Telangana",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/places/hyderabad/hydrabad-charminar-at-sunset-2.jpg/jcr:content/renditions/cq5dam.web.256.256.jpeg",
       "description": "Telangana presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 26,
       "name": "Tripura",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/tipura/jagannath-temple-tipura.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Tripura presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 27,
       "name": "Uttar Pradesh",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/uttar-pradesh/uttar-pradesh.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Uttar Pradesh presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 28,
       "name": "Uttarakhand",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/uttrakhand/nani-lake-uttrakhand.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Uttarakhand presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 29,
       "name": "West Bengal",
-      "type": "state",
+      "type": "STATE",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/west-bengal/victoria-memorial-west-bengal.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "West Bengal presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 30,
       "name": "Andaman and Nicobar Islands",
-      "type": "territory",
+      "type": "UNION_TERRITORY",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/andama/andaman-and-nicobar-islandsand.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
 
       "description": "Andaman and Nicobar Islands presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
@@ -214,14 +214,14 @@
     {
       "id": 31,
       "name": "Chandigarh",
-      "type": "territory",
+      "type": "UNION_TERRITORY",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/chandigarh/chandigarh-rock-garden-1.jpg/jcr:content/renditions/cq5dam.web.1800.600.jpeg",
       "description": "Chandigarh presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 32,
       "name": "Dadra and Nagar Haveli and Daman and Diu",
-      "type": "territory",
+      "type": "UNION_TERRITORY",
       "url": "https://www.incredibleindia.org/content/dam/incredibleindia/images/places/silvassa/silvassa-nakshatra-garden-0.jpg/jcr:content/renditions/cq5dam.web.512.512.jpeg",
 
       "description": "Dadra and Nagar Haveli and Daman and Diu presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
@@ -229,7 +229,7 @@
     {
       "id": 33,
       "name": "Delhi",
-      "type": "territory",
+      "type": "UNION_TERRITORY",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/places/delhi/new-delhi-new-delhi-amar-chakra.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
 
       "description": "Delhi presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
@@ -237,14 +237,14 @@
     {
       "id": 34,
       "name": "Lakshadweep",
-      "type": "territory",
+      "type": "UNION_TERRITORY",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/lakshadweep/suheli-Island-lakshadweep.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Lakshadweep presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     },
     {
       "id": 35,
       "name": "Puducherry",
-      "type": "territory",
+      "type": "UNION_TERRITORY",
       "url": "https://www.incredibleindia.org/content/dam/incredible-india-v2/images/states/puducherry/auroville-puducherry.jpg/jcr:content/renditions/cq5dam.web.1800.737.jpeg",
       "description": "Puducherry presents a glorious synthesis of culture against a colourful natural backdrop.  Varied wildlife, rich history, vivid culture, majestic architecture make this state a destination of endless surprises. Welcoming visitors with innumerable charming facets this state captivates the eager traveller, looking for a wonderful holiday experience. this state Tourism has always been the frontrunner in attracting greatest number of tourists, inland and foreign, as it boasts of a naturally, ecologically, culturally and religiously rich and diverse variety of tourist destinations that are treasures of visual treat where one can continuously explore new experiences of visitor gratification and delight."
     }
@@ -913,7 +913,7 @@
       "id": 66,
       "name": "Amber Palace",
       "stateid": 22,
-      "statename": "Rajastan",
+      "statename": "Rajasthan",
       "description": "Amber Palace is situated on a forested hill promontory that juts into Maota Lake near the town of Amer, about 11 kilometres (6.8 mi) from Jaipur city, the capital of Rajasthan.Amber Palace is an impressive fort that was the bastion of the powerful Kachwahas of Amber ",
       "images": [
         {
@@ -927,7 +927,7 @@
       "id": 67,
       "name": "Mehrangarh Fort",
       "stateid": 22,
-      "statename": "Rajastan",
+      "statename": "Rajasthan",
       "description": "Mehrangarh Fort is a famous historic monument in Jodhpur, India. The fort is known for its exquisite latticed windows, carved panels, decorated windows and magnificent walls of Moti Mahal, Phool Mahal and Sheesh Mahal",
       "images": [
         {
@@ -941,7 +941,7 @@
       "id": 68,
       "name": "City Palace of Udaipur",
       "stateid": 22,
-      "statename": "Rajastan",
+      "statename": "Rajasthan",
       "description": "The City Palace in Udaipur is a palace of great historical importance. It was built in a royal style and is considered the largest palace of Rajasthan.",
       "images": [
         {
@@ -955,7 +955,7 @@
       "id": 69,
       "name": "Lake Pichola",
       "stateid": 22,
-      "statename": "Rajastan",
+      "statename": "Rajasthan",
       "description": "Pichola Lake is a manmade marvel that has historically been recognised as an example of an engineering phenomenon, as it was successfully constructed in the midst of a desert.Hawa Mahal",
       "images": [
         {
@@ -969,7 +969,7 @@
       "id": 70,
       "name": "Jantar Mantar",
       "stateid": 22,
-      "statename": "Rajastan",
+      "statename": "Rajasthan",
       "description": "A Jantar Mantar is an assembly of stone-built astronomical instruments, designed to be used with the naked eye. ",
       "images": [
         {
@@ -983,7 +983,7 @@
       "id": 71,
       "name": "City Palace of Jaipur",
       "stateid": 22,
-      "statename": "Rajastan",
+      "statename": "Rajasthan",
       "description": "The City Palace, Jaipur is a royal residence and former administrative headquarters of the rulers of the Jaipur State in Jaipur, Rajasthan.City palace is the place where one can see forts, gardens, palaces, courtyards, etc. This place depicts the striking blend of Mughal and Rajasthan architecture",
       "images": [
         {
@@ -997,7 +997,7 @@
       "id": 72,
       "name": "Jaisalmer Fort",
       "stateid": 22,
-      "statename": "Rajastan",
+      "statename": "Rajasthan",
       "description": "Jaisalmer Fort is situated in the city of Jaisalmer, in the Indian state of Rajasthan. It is believed to be one of the very few living forts in the world (such as Carcassonne, France), as nearly one fourth of the old city's population still resides within the fort.",
       "images": [
         {
@@ -1011,7 +1011,7 @@
       "id": 73,
       "name": "Hawa Mahal",
       "stateid": 22,
-      "statename": "Rajastan",
+      "statename": "Rajasthan",
       "description": "The Hawa Mahal is a palace in the city of Jaipur, India. Built from red and pink sandstone, it is on the edge of the City Palace, Jaipur, and extends to the Zenana, or women's chambers",
       "images": [
         {
@@ -2910,7 +2910,7 @@
       "id": 106,
       "name": "Nakshatra Van",
       "stateid": 32,
-      "statename": "Nakshatra Van",
+      "statename": "Dadra and Nagar Haveli and Daman and Diu",
       "description": "Dadra and Nagar Haveli and Daman and Diu",
       "images": [
         {

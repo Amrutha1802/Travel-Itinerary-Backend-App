@@ -3,26 +3,13 @@
 -- USE ItineraryDataBase;
 
 
-CREATE TABLE Expense_Categories(
-    id int NOT NULL AUTO_INCREMENT,
-    category varchar(200),
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE State_Types(
-    id int NOT NULL AUTO_INCREMENT,
-    type varchar(200),
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE States(
    id int NOT NULL AUTO_INCREMENT,
    name varchar(100) NOT NULL,
    image_url text,
    description text,
-   state_type_id int,
-   PRIMARY KEY (id),
-   FOREIGN KEY(state_type_id) REFERENCES State_Types(id)
+   type varchar(200),
+   PRIMARY KEY (id)
 );
 
 
@@ -82,14 +69,13 @@ CREATE TABLE Favorites(
 
 CREATE TABLE Expenses(
     id int NOT NULL AUTO_INCREMENT,
-    category_id int NOT NULL,
+    category varchar(200),
     itinerary_id int NOT NULL,
     amount double,
     description varchar(200),
     PRIMARY KEY (id),
-    FOREIGN KEY(itinerary_id) REFERENCES Itineraries(id),
-    FOREIGN KEY(category_id) REFERENCES Expense_Categories(id)
-);
+    FOREIGN KEY(itinerary_id) REFERENCES Itineraries(id)
+    );
 
 --INSERTION QUERIES
 
