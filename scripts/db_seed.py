@@ -18,24 +18,38 @@ def populate_states():
             state_names = [] # names you get from the output
             """
             data = json.load(fp)
-            states_data = {state["name"]: state for state in data["states"]}
-            states_json_set = {state["name"] for state in data["states"]}
+            states_dict = {state["name"]: state for state in data["states"]}
+            states_set = set(states_dict.keys())
+            # states_json_set = {state["name"] for state in data["states"]}
+
         query = "SELECT name from States"
         states_db = exec_query(query, values=None, many=True)
         states_db_set = {state["name"] for state in states_db}
-        states_not_in_db = states_json_set - states_db_set
+        states_not_in_db = states_set - states_db_set
+
+        values = []
+        query = "INSERT INTO States(name,image_url,description,type) values"
         for state in states_not_in_db:
-            query = "INSERT INTO States(name,image_url,description,type) values(%s,%s,%s,%s)"
-            state_dict = states_data.get(state)
-            # state_dict = next((s for s in data["states"] if s["name"] == state), None)
-            if state_dict:
-                values = (
+            state_dict = states_dict.get(state)
+            values.append(
+                "('{}', '{}', '{}', '{}')".format(
                     state_dict["name"],
                     state_dict["url"],
                     state_dict["description"],
-                    state_dict["type"],
+                    state_dict["type"]
                 )
-                exec_query(query, values, many=False)
+            )
+
+            # state_dict = next((s for s in data["states"] if s["name"] == state), None)
+            # if state_dict:
+                # values = (
+                    # state_dict["name"],
+                    # state_dict["url"],
+                    # state_dict["description"],
+                    # state_dict["type"],
+                # )
+        query += ",".join(values)
+        exec_query(query, None, many=False)
 
     except:
         raise
@@ -50,10 +64,12 @@ def populate_tourist_places():
             data = json.load(fp)
             places_data = {place["name"]: place for place in data["tourist-places"]}
             places_json_set = {place["name"] for place in data["tourist-places"]}
+
         query = "SELECT name from Tourist_Places"
         places_db = exec_query(query, values=None, many=True)
         places_db_set = {place["name"] for place in places_db}
         places_not_in_db = places_json_set - places_db_set
+
         for place in places_not_in_db:
             query = "INSERT INTO Tourist_Places(name,state_id,image_url,description,review) values(%s,%s,%s,%s,%s)"
             place_dict = places_data[place]

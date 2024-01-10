@@ -8,7 +8,19 @@ from .db_config import db_conn2
 from gen import main_pb2
 
 
-def exec_query(query, values, many):
+def exec_select_query():
+    pass
+
+
+def exec_insert_query():
+    pass
+
+
+def exec_update_query():
+    pass
+
+
+def exec_query(query, values):
     """
     many = False -> fetchone
     many = True -> fetchall
@@ -17,19 +29,13 @@ def exec_query(query, values, many):
     """
     try:
         with db_conn2.cursor() as cursor:
-            if values is not None:
-                cursor.execute(query, values)
-                db_conn2.commit()
-            else:
-                cursor.execute(query)
-                db_conn2.commit()
+            cursor.execute(query, values)
+            db_conn2.commit()
 
             if query.strip().lower().startswith("insert"):
                 return cursor.lastrowid
-            if many:
-                result = cursor.fetchall()
-            else:
-                result = cursor.fetchone()
+
+            result = cursor.fetchall()
         return result
     except:
         raise
@@ -54,9 +60,13 @@ def get_user_pb(user_db):
         1. raise exception
         2. Send empty user object
     """
-    if user_db is None:
-        user_pb2 = main_pb2.User()
-    else:
+    user_pb2 = main_pb2.User()
+    if user_db:
+        # TODO: use . notation
+        user_pb2.id = user_db["id"]
+        user_pb2.id = user_db["id"]
+        user_pb2.id = user_db["id"]
+        user_pb2.id = user_db["id"]
         user_pb2 = main_pb2.User(
             id=user_db["id"],
             name=user_db["name"],

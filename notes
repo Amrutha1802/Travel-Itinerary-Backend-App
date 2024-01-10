@@ -1,3 +1,7 @@
+### Jan 10, 2024
+- single responsibility principle
+- Q: What happens to the cursor when we insert multiple values in a single SQL statement?
+
 ### Jan 9, 2024
 
 - Remove state_types
